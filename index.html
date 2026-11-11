@@ -12,12 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Preload Critical Hero Assets -->
-  <link rel="preload" as="image" href="assets/hero-bg.png">
+  <link rel="preload" as="image" href="assets/hero-bg.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/reader.png" fetchpriority="high">
   <link rel="preload" as="image" href="assets/logo-tree.png">
-  <link rel="preload" as="image" href="assets/reader.png">
-  <link rel="preload" as="image" href="assets/leaf-gold.png">
-  <link rel="preload" as="image" href="assets/leaf-olive.png">
-  <link rel="preload" as="image" href="assets/leaf-amber.png">
+  <link rel="preload" as="image" href="assets/top-branch.png">
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
@@ -120,10 +118,11 @@
 
       <!-- Background Scene (Hero Artwork) — NO object-fit crop -->
       <picture class="stage__picture">
-        <source media="(max-width: 600px)" srcset="assets/hero-bg.png">
-        <img src="assets/hero-bg.png"
+        <source media="(max-width: 600px)" srcset="assets/hero-bg.jpg">
+        <img src="assets/hero-bg.jpg"
              alt="Enchanted blooming tree at sunset with warm lanterns and distant palace"
-             class="stage__bg" id="heroBg">
+             class="stage__bg" id="heroBg"
+             fetchpriority="high" decoding="sync">
       </picture>
 
       <!-- Decorative Reader Character Layer (sits on grassy hill, behind glows & leaves) -->
@@ -133,7 +132,8 @@
           <img src="assets/reader.png"
                alt=""
                class="reader-character__img"
-               id="readerImg">
+               id="readerImg"
+               fetchpriority="high" decoding="async">
         </div>
       </div>
 

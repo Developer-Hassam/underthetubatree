@@ -30,7 +30,7 @@
   --header-total-height: calc(var(--top-bar-height) + var(--nav-height));
 
   /* Hero BG image path (easy to swap for WordPress / portrait) */
-  --hero-bg-url: url('assets/hero-bg.png');
+  --hero-bg-url: url('assets/hero-bg.jpg');
 }
 
 /* ==========================================================================
@@ -406,14 +406,14 @@ button:focus-visible {
   will-change: transform, opacity, filter;
 }
 
-/* Intro State Transitions */
+/* Intro State Transitions — only reveal once background artwork is loaded */
 body.intro-running .stage__bg {
   transform: scale(1.04);
   opacity: 0;
 }
 
-body.intro-ready .stage__bg,
-body.skip-intro-active .stage__bg {
+body.bg-loaded.intro-ready .stage__bg,
+body.bg-loaded.skip-intro-active .stage__bg {
   transform: scale(1);
   opacity: 1;
   filter: blur(0);
@@ -490,13 +490,21 @@ body.skip-intro-active .reader-character {
 
 /* ---------- Lantern Glows ----------
    Positioned as % inside the stage, so they stay locked to the artwork.
-   Size is ~6% of stage width (via vw relative to stage).
+   Hidden until hero-bg has loaded and begun fading in, so glows never
+   appear on an empty sky before the lanterns themselves are visible.
    --------------------------------------------------- */
 .lantern-glows {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 3;
+  opacity: 0;
+  transition: opacity 1.8s ease 0.6s;
+}
+
+body.bg-loaded.intro-ready .lantern-glows,
+body.bg-loaded.skip-intro-active .lantern-glows {
+  opacity: 1;
 }
 
 .glow {
@@ -553,8 +561,8 @@ body.skip-intro-active .reader-character {
   animation: fireflyFloat 6.5s ease-in-out infinite alternate;
 }
 
-body.intro-ready .firefly,
-body.skip-intro-active .firefly {
+body.bg-loaded.intro-ready .firefly,
+body.bg-loaded.skip-intro-active .firefly {
   opacity: 0.85;
 }
 
@@ -958,6 +966,7 @@ body.skip-intro-active .hero-action {
     opacity: 0.8 !important;
   }
 
+  .lantern-glows,
   .reader-character,
   .hero-tagline,
   .hero-title,

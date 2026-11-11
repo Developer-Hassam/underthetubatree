@@ -33,7 +33,7 @@
     // Falling Leaves Particle Count
     leafCounts: {
       desktop: 12,
-      mobile: 6
+      mobile: 10
     },
 
     // Sprites configuration
@@ -59,6 +59,7 @@
   // 2. DOM ELEMENTS & STATE
   // ==========================================================================
   const stage = document.getElementById('stage');
+  const heroBg = document.getElementById('heroBg');
   const readerCharacter = document.getElementById('readerCharacter');
   const leavesCanvas = document.getElementById('leavesCanvas');
   const firefliesLayer = document.getElementById('firefliesLayer');
@@ -181,8 +182,9 @@
       this.width = targetSize * aspect;
       this.height = targetSize;
 
-      // Spawn from canopy area (upper-right of stage: roughly x 45%-95%, y -10% to 10%)
-      this.x = (canvasW * 0.45) + Math.random() * (canvasW * 0.50);
+      // Spawn from canopy area (desktop: 45%-95%, mobile: 56%-95% so leaves stay visible on screen)
+      const minX = window.innerWidth <= 768 ? 0.56 : 0.45;
+      this.x = (canvasW * minX) + Math.random() * (canvasW * (0.95 - minX));
       this.y = initial ? Math.random() * (canvasH * 0.7) : -this.height - Math.random() * 60;
 
       // Slow gentle drift
@@ -460,17 +462,33 @@
   // ==========================================================================
   // 10. INITIALIZATION
   // ==========================================================================
+  function onHeroBgReady(callback) {
+    let fired = false;
+    const done = () => {
+      if (fired) return;
+      fired = true;
+      document.body.classList.add('bg-loaded');
+      callback();
+    };
+
+    if (!heroBg || (heroBg.complete && heroBg.naturalWidth > 0)) {
+      done();
+    } else {
+      heroBg.addEventListener('load', done, { once: true });
+      heroBg.addEventListener('error', done, { once: true });
+      setTimeout(done, 3000);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initFireflies();
     initParallax();
     applyReaderPosition();
 
-    preloadSprites(() => {
-      resizeCanvas();
-      initLeaves();
-      requestAnimationFrame(animateLeaves);
-
+    // Start hero intro / final state immediately once hero background is ready
+    // (never blocked by leaf sprite preloading)
+    onHeroBgReady(() => {
       const hasPlayed = sessionStorage.getItem(CONFIG.storageKeyIntro) === 'true';
 
       if (prefersReducedMotion || hasPlayed) {
@@ -478,6 +496,13 @@
       } else {
         runIntroSequence();
       }
+    });
+
+    // Load falling leaf sprites in parallel without delaying background or reader
+    preloadSprites(() => {
+      resizeCanvas();
+      initLeaves();
+      requestAnimationFrame(animateLeaves);
     });
   });
 
