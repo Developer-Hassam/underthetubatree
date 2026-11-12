@@ -4,149 +4,124 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Under The Tuba Tree | Stories • Dreams • Deen</title>
-  <meta name="description" content="Under The Tuba Tree - An enchanted author brand for children's literature, Islamic storytelling, and cultural values by Tuba Seyal.">
+  <meta name="description" content="Under The Tuba Tree — heartfelt children's books woven with love, Islamic values and Pakistani heritage by Tuba Seyal.">
 
   <!-- Google Fonts Preconnect & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Preload Critical Hero Assets -->
-  <link rel="preload" as="image" href="assets/hero-bg.jpg" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/reader.png" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/logo-tree.png">
-  <link rel="preload" as="image" href="assets/top-branch.png">
+  <!-- Preload Fonts & Critical Hero Assets -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap">
+  <link rel="preload" as="image" href="assets/hero-bg.jpg?v=2" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/reader.png?v=2">
+  <link rel="preload" as="image" href="assets/logo-mark.png?v=4">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
-  <!-- Top Bar (Deep Plum) -->
+  <!-- Skip-to-content accessible link -->
+  <a href="#heroSection" class="skip-link">Skip to main content</a>
+
+  <!-- ===== TOP BAR (Deep Plum) ===== -->
   <header class="top-bar" id="topBar">
     <div class="top-bar__inner">
-      <!-- Left decorative blossom branch -->
-      <div class="top-bar__flourish" aria-hidden="true">
-        <img src="assets/top-branch.png" alt="" class="top-bar__branch">
-      </div>
-
-      <!-- Centered Brand Pillars -->
       <p class="top-bar__tagline">
         Stories <span class="bullet" aria-hidden="true">•</span> Dreams <span class="bullet" aria-hidden="true">•</span> Deen
       </p>
-
-      <!-- Right Social Icons + Story Circle CTA -->
-      <div class="top-bar__actions">
-        <div class="top-bar__socials" aria-label="Social Media">
-          <a href="#instagram" class="social-link" aria-label="Instagram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="#pinterest" class="social-link" aria-label="Pinterest">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.5 19l1.8-6.5m0 0c-.6-1-.5-2.6.5-3.4 1.2-1 3.4-.5 3.8 1.2.4 1.7-.7 3.7-2.2 3.7-.9 0-1.5-.6-1.3-1.4"/></svg>
-          </a>
-          <a href="#youtube" class="social-link" aria-label="YouTube">
-            <svg width="15" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><polygon points="10 9 16 12 10 15 10 9" fill="currentColor" stroke="none"/></svg>
-          </a>
-        </div>
-
-        <a href="#newsletter" class="top-bar__cta-btn">
-          <svg class="cta-mail-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
-          Join Our Story Circle
-        </a>
-      </div>
+      <a href="#newsletter" class="top-bar__cta-btn">Join our Story Circle</a>
     </div>
   </header>
 
-  <!-- Main Navigation -->
+  <!-- ===== MAIN NAVIGATION ===== -->
   <nav class="main-nav" id="mainNav" aria-label="Main Navigation">
     <div class="main-nav__inner">
       <a href="#" class="brand-logo" aria-label="Under The Tuba Tree Home">
-        <span class="brand-logo__tree-wrap" aria-hidden="true">
-          <img src="assets/logo-tree.png" alt="" class="brand-logo__tree">
-        </span>
-        <span class="brand-logo__text">
-          Under The<br>Tuba Tree
-        </span>
+        <img src="assets/logo-mark.png?v=4" alt="Under The Tuba Tree sprout monogram" class="brand-logo__mark">
+        <span class="brand-logo__text">Under The Tuba Tree</span>
       </a>
 
       <!-- Desktop Navigation Links -->
-      <ul class="nav-menu" id="navMenu">
+      <ul class="nav-menu nav-menu--desktop" id="navMenuDesktop">
         <li><a href="#" class="nav-link active">Home</a></li>
-        <li>
-          <a href="#books" class="nav-link nav-link--has-sub">
-            Our Books
-            <svg class="nav-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          </a>
-        </li>
+        <li><a href="#featured-book" class="nav-link">Our Books</a></li>
         <li><a href="#story-garden" class="nav-link">The Story Garden</a></li>
-        <li><a href="#author" class="nav-link">Meet The Author</a></li>
-        <li>
-          <a href="#resources" class="nav-link nav-link--has-sub">
-            Resources
-            <svg class="nav-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          </a>
-        </li>
-        <li><a href="#journal" class="nav-link">Blog</a></li>
+        <li><a href="#about" class="nav-link">About the Author</a></li>
+        <li><a href="#readers-corner" class="nav-link">Little Readers' Corner</a></li>
+        <li><a href="#journal" class="nav-link">Journal</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
-        <li class="nav-search-item">
-          <button type="button" class="nav-search-btn" aria-label="Search stories">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><line x1="20" y1="20" x2="16.4" y2="16.4"/></svg>
-          </button>
-        </li>
       </ul>
 
       <!-- Mobile Hamburger Button -->
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileDrawer">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-
-      <!-- Organic curved wave under the left logo -->
-      <svg class="main-nav__wave" viewBox="0 0 430 26" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0,0 L430,0 C368,0 322,24 215,24 C108,24 62,0 0,0 Z" fill="#FDF7F2"/>
-        <path d="M0,0 C62,0 108,24 215,24 C322,24 368,0 430,0" fill="none" stroke="rgba(84, 45, 69, 0.14)" stroke-width="1"/>
-      </svg>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- ===== MOBILE DRAWER ===== -->
+  <div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-label="Navigation menu" aria-modal="true" hidden>
+    <div class="mobile-drawer__backdrop" id="drawerBackdrop"></div>
+    <div class="mobile-drawer__panel" id="drawerPanel">
+      <button class="mobile-drawer__close" id="drawerClose" aria-label="Close navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <ul class="mobile-drawer__links">
+        <li><a href="#" class="mobile-drawer__link">Home</a></li>
+        <li><a href="#featured-book" class="mobile-drawer__link">Our Books</a></li>
+        <li><a href="#story-garden" class="mobile-drawer__link">The Story Garden</a></li>
+        <li><a href="#about" class="mobile-drawer__link">About the Author</a></li>
+        <li><a href="#readers-corner" class="mobile-drawer__link">Little Readers' Corner</a></li>
+        <li><a href="#journal" class="mobile-drawer__link">Journal</a></li>
+        <li><a href="#contact" class="mobile-drawer__link">Contact</a></li>
+      </ul>
+      <a href="#newsletter" class="mobile-drawer__cta btn-gold">Join our Story Circle</a>
+    </div>
+  </div>
+
+  <!-- ===== HERO SECTION ===== -->
   <section class="hero-section" id="heroSection" aria-label="Welcome Hero">
 
-    <!-- Stage: 16:9 artwork container, anchored right, holds ALL overlays -->
+    <!-- Stage: 16:9 artwork container, anchored right -->
     <div class="stage" id="stage">
 
-      <!-- Background Scene (Hero Artwork) — NO object-fit crop -->
+      <!-- Background Scene -->
       <picture class="stage__picture">
-        <source media="(max-width: 600px)" srcset="assets/hero-bg.jpg">
-        <img src="assets/hero-bg.jpg"
-             alt="Enchanted blooming tree at sunset with warm lanterns and distant palace"
+        <source media="(max-width: 600px)" srcset="assets/hero-bg.jpg?v=2">
+        <img src="assets/hero-bg.jpg?v=2"
+             alt="Moonlit night scene with blooming tree, glowing lanterns, crescent moon and distant palace"
              class="stage__bg" id="heroBg"
              fetchpriority="high" decoding="sync">
       </picture>
 
-      <!-- Decorative Reader Character Layer (sits on grassy hill, behind glows & leaves) -->
+      <!-- Decorative Reader Character Layer -->
       <div class="reader-character" id="readerCharacter" aria-hidden="true">
         <div class="reader-character__shadow"></div>
         <div class="reader-character__body">
-          <img src="assets/reader.png"
+          <img src="assets/reader.png?v=2"
                alt=""
                class="reader-character__img"
                id="readerImg"
-               fetchpriority="high" decoding="async">
+               decoding="async">
         </div>
       </div>
 
-      <!-- Lantern Glow Layer (radial screen glows, % positioned inside stage) -->
+      <!-- Lantern Glow Layer -->
       <div class="lantern-glows" id="lanternGlows" aria-hidden="true">
         <div class="glow lantern-1" style="left: 50.0%; top: 31.0%;"></div>
-        <div class="glow lantern-2" style="left: 71.5%; top: 22.0%;"></div>
-        <div class="glow lantern-3" style="left: 78.0%; top: 24.0%;"></div>
-        <div class="glow lantern-4" style="left: 72.0%; top: 42.0%;"></div>
-        <div class="glow lantern-5" style="left: 93.0%; top: 44.0%;"></div>
+        <div class="glow lantern-2" style="left: 72.0%; top: 20.0%;"></div>
+        <div class="glow lantern-3" style="left: 79.5%; top: 25.0%;"></div>
+        <div class="glow lantern-4" style="left: 71.5%; top: 41.0%;"></div>
+        <div class="glow lantern-5" style="left: 92.5%; top: 43.0%;"></div>
       </div>
 
-      <!-- Sparkles / Fireflies Layer -->
+      <!-- Fireflies Layer -->
       <div class="fireflies-layer" id="firefliesLayer" aria-hidden="true"></div>
 
       <!-- Falling Leaves Canvas Layer -->
@@ -158,29 +133,377 @@
     <!-- Hero Content (Left-aligned on Desktop, Center/Bottom on Mobile) -->
     <div class="hero-content" id="heroContent">
       <p class="hero-tagline" id="heroTagline">Every leaf holds a story...</p>
-      <h1 class="hero-title" id="heroTitle">Under The<br>Tuba Tree</h1>
+      <h1 class="hero-headline" id="heroHeadline">Stories that grow<br>from the heart.</h1>
+      <p class="hero-signature" id="heroSignature">Under The Tuba Tree</p>
       <div class="hero-action" id="heroAction">
-        <a href="#story-garden" class="btn-primary" id="exploreBtn">
+        <a href="#story-garden" class="btn-gold" id="exploreBtn">
           Explore the stories
+        </a>
+        <a href="#about" class="btn-ghost" id="meetAuthorBtn">
+          Meet the Author
         </a>
       </div>
     </div>
 
-    <!-- Bottom Ground Floral Strip Layer -->
-    <div class="ground-layer" aria-hidden="true">
-      <img src="assets/ground.png" alt="" class="ground-img">
+  </section>
+
+  <!-- ===== EXPLORE — Navigation Cards ===== -->
+  <section class="explore-section" id="explore" aria-label="Explore Our Story Garden">
+    <!-- Curved SVG divider overlapping hero -->
+    <div class="explore-divider" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,80 C360,0 1080,0 1440,80 L1440,80 L0,80 Z" fill="var(--color-ivory)"/>
+      </svg>
+    </div>
+    <div class="explore-inner section__container">
+      <h2 class="explore-heading">
+        Explore Our Story Garden
+        <span class="leaf-ornament" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+        </span>
+      </h2>
+      <div class="explore-cards" id="exploreCards">
+        <!-- Cards generated from JS NAV_CARDS array -->
+      </div>
     </div>
   </section>
 
-  <!-- The Story Garden Placeholder Section -->
-  <section class="story-garden-section" id="story-garden">
-    <div class="section-container">
-      <h2 class="section-title">The Story Garden</h2>
-      <p class="section-subtitle">A little world of stories waiting to grow.</p>
+  <!-- ===== FEATURED BOOK ===== -->
+  <section class="section section--ivory" id="featured-book">
+    <div class="section-divider section-divider--to-ivory" aria-hidden="true">
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C480,48 960,48 1440,0 L1440,48 L0,48 Z" fill="var(--color-ivory)"/>
+      </svg>
+    </div>
+    <div class="section__container featured-book reveal-on-scroll">
+      <div class="featured-book__cover">
+        <img src="assets/cover.jpg?v=2" alt="Whispers from Jannah book cover" class="featured-book__img" width="583" height="856" loading="lazy">
+      </div>
+      <div class="featured-book__info">
+        <h2 class="section__heading">
+          Whispers from Jannah
+          <span class="leaf-ornament" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+          </span>
+        </h2>
+        <p class="featured-book__desc">A heartfelt picture book in gentle verse about love, loss and the comfort of knowing our loved ones are safe in Jannah.</p>
+
+        <!-- Three labeled editorial blocks -->
+        <div class="featured-book__blocks">
+          <div class="featured-book__block">
+            <h3 class="featured-book__block-label">Who it is for</h3>
+            <p class="featured-book__block-text">Parents and families who have lost a child, and the people who love them. <span class="placeholder-text">[Age range to confirm with the author]</span></p>
+          </div>
+
+          <div class="featured-book__block">
+            <h3 class="featured-book__block-label">Themes</h3>
+            <div class="featured-book__tags">
+              <span class="tag">Grief and loss</span>
+              <span class="tag">Love</span>
+              <span class="tag">Faith and hope</span>
+            </div>
+          </div>
+
+          <div class="featured-book__block">
+            <h3 class="featured-book__block-label">The message</h3>
+            <p class="featured-book__block-text featured-book__block-text--message">Your child is okay. And one day, Jannah will bring you home to them.</p>
+          </div>
+        </div>
+
+        <div class="featured-book__actions">
+          <a href="#" class="btn-gold">Get your copy</a>
+          <a href="#" class="btn-outline">Look inside</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Main JavaScript -->
-  <script src="script.js"></script>
+  <!-- ===== SECTION 5: THE STORY GARDEN — UPCOMING COLLECTIONS ===== -->
+  <section class="section sg" id="story-garden" aria-labelledby="sgHeading">
+
+    <!-- CSS stars background -->
+    <div class="sg__stars" aria-hidden="true"></div>
+
+    <div class="section__container sg__container">
+
+      <!-- Section header -->
+      <header class="sg__header reveal-on-scroll">
+        <span class="sg__eyebrow">Future Books &amp; Stories</span>
+        <h2 class="sg__title" id="sgHeading">
+          The Story Garden
+          <span class="leaf-ornament" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+          </span>
+        </h2>
+        <p class="sg__subtitle">Upcoming Collections</p>
+        <p class="sg__tagline">Every story begins with a seed. Explore the collections and titles taking root in our garden, crafted to nurture faith, culture and childhood wonder.</p>
+      </header>
+
+      <!-- Spotlight: Pakistani Childhood Storytelling Collection -->
+      <div class="sg-spotlight reveal-on-scroll">
+        <div class="sg-spotlight__decor" aria-hidden="true">
+          <svg width="280" height="280" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" stroke="rgba(196, 154, 88, 0.18)" stroke-width="1" stroke-dasharray="4 4"/>
+            <circle cx="100" cy="100" r="70" stroke="rgba(196, 154, 88, 0.28)" stroke-width="1.5"/>
+            <path d="M100 25 C110 65 140 90 175 100 C140 110 110 135 100 175 C90 135 60 110 25 100 C60 90 90 65 100 25 Z" fill="rgba(196, 154, 88, 0.08)"/>
+          </svg>
+        </div>
+
+        <div class="sg-spotlight__inner">
+          <div class="sg-spotlight__badges">
+            <span class="sg-badge sg-badge--spotlight">Featured Upcoming Collection</span>
+            <span class="sg-badge sg-badge--status">In Development</span>
+          </div>
+
+          <h3 class="sg-spotlight__title">Pakistani Childhood Stories</h3>
+          <p class="sg-spotlight__lead">A planned storytelling collection celebrating the joy, warmth and vibrant traditions of growing up in Pakistan.</p>
+
+          <p class="sg-spotlight__desc">
+            Inspired by childhood memories and the rich fabric of Pakistani culture, this upcoming collection brings together cherished family traditions, spirited cousin adventures, and imaginative jinn bedtime stories, all gently guided by timeless Islamic values. Created especially for young readers and families longing for cultural roots, laughter and faith-filled storytelling.
+          </p>
+
+          <!-- Core Themes of the Collection -->
+          <div class="sg-spotlight__pillars" aria-label="Collection themes">
+            <div class="sg-pillar">
+              <span class="sg-pillar__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </span>
+              <span>Cultural Traditions</span>
+            </div>
+
+            <div class="sg-pillar">
+              <span class="sg-pillar__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+              <span>Cousin Adventures</span>
+            </div>
+
+            <div class="sg-pillar">
+              <span class="sg-pillar__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </span>
+              <span>Family Memories</span>
+            </div>
+
+            <div class="sg-pillar">
+              <span class="sg-pillar__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span>Imaginative Jinn Stories</span>
+            </div>
+
+            <div class="sg-pillar">
+              <span class="sg-pillar__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              </span>
+              <span>Islamic Values</span>
+            </div>
+          </div>
+
+          <div class="sg-spotlight__footer">
+            <button type="button" class="btn-gold sg-notify-trigger" data-title="Pakistani Childhood Stories">
+              Notify Me When Released
+            </button>
+            <span class="sg-spotlight__note">Be the first to see cover art and sample chapters.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Collections Grid (Data-driven, easy to update) -->
+      <div class="sg-grid" id="sgCollectionsGrid">
+        <!-- Rendered by JS via UPCOMING_COLLECTIONS -->
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ===== NOTIFY MODAL ===== -->
+  <div class="notify-modal" id="notifyModal" role="dialog" aria-label="Get notified when this book is available" aria-modal="true" hidden>
+    <div class="notify-modal__backdrop" id="notifyBackdrop"></div>
+    <div class="notify-modal__card" id="notifyCard">
+      <button class="notify-modal__close" id="notifyClose" aria-label="Close notification signup">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h3 class="notify-modal__heading" id="notifyHeading">Get Notified</h3>
+      <p class="notify-modal__desc" id="notifyDesc">We will let you know when this book is ready.</p>
+      <form class="notify-modal__form" id="notifyForm" action="#" method="post">
+        <input type="email" class="notify-modal__input" id="notifyEmail" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit" class="notify-modal__btn btn-gold">Notify Me</button>
+      </form>
+      <p class="notify-modal__success" id="notifySuccess" hidden>Thank you! We will be in touch.</p>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT THE AUTHOR ===== -->
+  <section class="about-section" id="about" aria-label="About the Author">
+    <div class="section-divider section-divider--to-sage-ivory" aria-hidden="true">
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,48 C360,0 1080,0 1440,48 L1440,48 L0,48 Z" fill="#F8F9F3"/>
+      </svg>
+    </div>
+    <div class="section__container about-author reveal-on-scroll">
+      <div class="about-author__photo-col">
+        <div class="about-author__frame" aria-label="Author portrait">
+          <!-- Fallback placeholder: author.jpg not present -->
+          <div class="about-author__placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.3" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+            </svg>
+            <span class="about-author__placeholder-text">[Author photo goes here]</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-author__text">
+        <h2 class="section__heading">
+          Meet Tuba Seyal
+          <span class="leaf-ornament" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+          </span>
+        </h2>
+        <p class="about-author__lead">
+          Tuba Seyal is an author and storyteller. Her first book, Whispers from Jannah, was written for her daughter Hanaa and for every parent whose arms ache with an absence no words can fill. <span class="about-placeholder">[Confirm wording with the author]</span>
+        </p>
+
+        <div class="about-blocks">
+          <div class="about-block">
+            <h3 class="about-block__title">Her story</h3>
+            <p class="about-block__desc">[Her story placeholder to be provided by the author]</p>
+          </div>
+          <div class="about-block">
+            <h3 class="about-block__title">What inspires her</h3>
+            <p class="about-block__desc">[What inspires her placeholder to be provided by the author]</p>
+          </div>
+          <div class="about-block">
+            <h3 class="about-block__title">The vision behind Under The Tuba Tree</h3>
+            <p class="about-block__desc">[Vision placeholder to be provided by the author]</p>
+          </div>
+        </div>
+
+        <blockquote class="about-quote">
+          <p class="about-quote__text">&ldquo;Your child is okay. And one day, Jannah will bring you home to them.&rdquo;</p>
+        </blockquote>
+
+        <div class="about-author__action">
+          <a href="#" class="btn-outline">[Read my story link placeholder]</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LITTLE READERS' CORNER ===== -->
+  <section class="readers-section" id="readers-corner" aria-label="Little Readers' Corner">
+    <div class="section-divider section-divider--to-sage" aria-hidden="true">
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C480,48 960,48 1440,0 L1440,48 L0,48 Z" fill="#E8EFE3"/>
+      </svg>
+    </div>
+    <div class="section__container reveal-on-scroll">
+      <header class="readers-header">
+        <h2 class="section__heading section__heading--center">
+          Little Readers' Corner
+          <span class="leaf-ornament" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+          </span>
+        </h2>
+        <p class="readers-subheading">Activities, reading resources and creative downloads for little readers, parents and educators.</p>
+      </header>
+      <div class="readers-tiles" id="readersTiles">
+        <!-- Rendered dynamically by script.js from READERS_CORNER_RESOURCES array -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== JOIN OUR STORY CIRCLE (Newsletter) ===== -->
+  <section class="newsletter-band" id="newsletter" aria-label="Newsletter">
+    <div class="section-divider section-divider--to-plum" aria-hidden="true">
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,48 C360,0 1080,0 1440,48 L1440,48 L0,48 Z" fill="var(--color-deep-plum)"/>
+      </svg>
+    </div>
+    <div class="section__container newsletter-band__inner reveal-on-scroll">
+      <h2 class="newsletter-band__heading">
+        Join Our Story Circle
+        <span class="leaf-ornament" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
+        </span>
+      </h2>
+      <p class="newsletter-band__tagline">Every story begins with a seed. Join our Story Circle and be the first to discover new stories, special announcements and little surprises.</p>
+      
+      <form class="newsletter-form" id="newsletterForm" action="#" method="post" aria-label="Story Circle newsletter signup" novalidate>
+        <!-- Visually hidden label -->
+        <label for="newsletterEmail" class="sr-only">Your email address</label>
+        
+        <!-- Honeypot field for spam prevention (hidden from real users) -->
+        <div class="newsletter-form__hp" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+          <label for="newsletterHp">Leave this field blank</label>
+          <input type="text" name="b_comment" id="newsletterHp" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="newsletter-form__fields">
+          <input type="email" id="newsletterEmail" name="email" class="newsletter-form__input" placeholder="Your email address" required aria-describedby="newsletterMsg">
+          <button type="submit" class="newsletter-form__btn btn-gold">Subscribe</button>
+        </div>
+
+        <!-- Inline success and error messages -->
+        <div class="newsletter-form__messages" id="newsletterMsg" aria-live="polite">
+          <p class="newsletter-msg newsletter-msg--success" id="newsletterSuccess" hidden>Thank you for joining our Story Circle! Welcome to our family.</p>
+          <p class="newsletter-msg newsletter-msg--error" id="newsletterError" hidden>Please enter a valid email address.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" id="contact" aria-label="Site footer">
+    <div class="section__container footer__inner">
+      <div class="footer__brand">
+        <a href="#" aria-label="Under The Tuba Tree Home">
+          <img src="assets/logo-lockup.png" alt="Under The Tuba Tree — Stories that grow from the heart" class="footer__logo-lockup" width="860" height="800" loading="lazy">
+        </a>
+      </div>
+
+      <nav class="footer__links" aria-label="Footer Navigation">
+        <a href="#about">About</a>
+        <a href="#featured-book">Books</a>
+        <a href="#contact">Contact</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="#">Privacy Policy</a>
+      </nav>
+
+      <div class="footer__contact-info">
+        <a href="mailto:[hello@underthetubatree.com]" class="footer__email">[hello@underthetubatree.com]</a>
+      </div>
+
+      <div class="footer__socials" aria-label="Social media links">
+        <a href="https://instagram.com/underthetubatree" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Instagram (opens in a new tab)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="#" class="footer__social-link" aria-label="Facebook placeholder">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="footer__social-link" aria-label="Pinterest placeholder">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.5 19l1.8-6.5m0 0c-.6-1-.5-2.6.5-3.4 1.2-1 3.4-.5 3.8 1.2.4 1.7-.7 3.7-2.2 3.7-.9 0-1.5-.6-1.3-1.4"/>
+          </svg>
+        </a>
+      </div>
+
+      <p class="footer__copy">&copy; 2026 Tuba Seyal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Section margin drifting leaves (desktop/tablet decorative, visible only when section in view) -->
+  <div class="margin-leaves" id="marginLeaves" aria-hidden="true"></div>
+
+  <!-- Main JavaScript (deferred for performance) -->
+  <script src="script.js?v=21" defer></script>
 </body>
 </html>
