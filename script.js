@@ -377,15 +377,27 @@
 
       const isMobile = window.innerWidth <= 768;
       
-      // USER PRIORITY: Significantly higher quantity of leaf-plum.png in BOTH desktop and mobile!
-      // Guarantee alternating plum leaves plus random chance so ~60% of all leaves are deep plum
-      let type;
-      if (this.slotIndex % 2 === 0 || Math.random() < 0.35) {
-        type = 'plum';
-      } else {
-        const otherTypes = ['gold', 'olive', 'olive2', 'amber', 'green'];
-        type = otherTypes[Math.floor(Math.random() * otherTypes.length)];
-      }
+      // Curated diverse leaf palette: Plum included, balanced with Gold, Amber, Olive, Green & Dark Olive
+      const LEAF_PALETTE = [
+        'plum',       // Deep plum
+        'gold',       // Warm gold
+        'amber',      // Autumn amber
+        'olive',      // Soft olive
+        'plum',       // Deep plum
+        'green',      // Forest green
+        'olive2',     // Fresh olive
+        'gold',       // Radiant gold
+        'olive-dark', // Earthy olive
+        'amber'       // Warm amber
+      ];
+
+      const baseType = (this.slotIndex !== undefined)
+        ? LEAF_PALETTE[this.slotIndex % LEAF_PALETTE.length]
+        : LEAF_PALETTE[Math.floor(Math.random() * LEAF_PALETTE.length)];
+
+      const type = (Math.random() < 0.85)
+        ? baseType
+        : LEAF_PALETTE[Math.floor(Math.random() * LEAF_PALETTE.length)];
 
       this.type = type;
       this.img = loadedSprites[type];
@@ -1110,7 +1122,7 @@
     // Fewer on mobile (2 on mobile, 4 on desktop)
     const isMobile = window.innerWidth <= 768;
     const count = isMobile ? 2 : 4;
-    const sprites = ['assets/leaf-plum.png', 'assets/leaf-gold.png', 'assets/leaf-plum.png', 'assets/leaf-amber.png'];
+    const sprites = ['assets/leaf-gold.png', 'assets/leaf-plum.png', 'assets/leaf-amber.png', 'assets/leaf-olive.png', 'assets/leaf-green.png'];
 
     container.innerHTML = '';
     const leavesData = [];
