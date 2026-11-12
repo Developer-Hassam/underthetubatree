@@ -32,8 +32,8 @@
 
     // Falling Leaves
     leafCounts: {
-      desktop: 18,
-      mobile: 10
+      desktop: 20,
+      mobile: 13
     },
 
     // 8 leaf sprites — distribution rules applied in LeafParticle.reset()
@@ -376,21 +376,15 @@
       this.depth = Math.random();
 
       const isMobile = window.innerWidth <= 768;
-      // In mobile view, maintain rich plum leaf presence as requested
-      const plumRate = isMobile ? 0.32 : 0.14;
-
-      const roll = Math.random();
+      
+      // USER PRIORITY: Significantly higher quantity of leaf-plum.png in BOTH desktop and mobile!
+      // Guarantee alternating plum leaves plus random chance so ~60% of all leaves are deep plum
       let type;
-      if (roll < plumRate) {
+      if (this.slotIndex % 2 === 0 || Math.random() < 0.35) {
         type = 'plum';
-      } else if (roll < plumRate + 0.16) {
-        type = 'green';
-      } else if (roll < plumRate + 0.28) {
-        type = 'olive-dark';
       } else {
-        // Light leaves
-        const lightTypes = ['gold', 'olive', 'olive2', 'amber'];
-        type = lightTypes[Math.floor(Math.random() * lightTypes.length)];
+        const otherTypes = ['gold', 'olive', 'olive2', 'amber', 'green'];
+        type = otherTypes[Math.floor(Math.random() * otherTypes.length)];
       }
 
       this.type = type;
@@ -436,8 +430,10 @@
       this.rotation = node.baseAngle + (Math.random() - 0.5) * 0.35;
       this.rotSpeed = (Math.random() - 0.5) * 0.004;
 
-      // Gentle opacity curve
-      this.baseAlpha = 0.52 + this.depth * 0.44;
+      // Opacity: rich and solid for deep plum leaves so they stand out clearly
+      this.baseAlpha = (type === 'plum')
+        ? 0.82 + this.depth * 0.18
+        : 0.55 + this.depth * 0.40;
       this.alpha = 0;
       this.fadeIn = true;
     }
@@ -541,6 +537,7 @@
       }
       leaves.push(new LeafParticle(initialDelay, i));
     }
+    window.__tubaLeaves = leaves;
   }
 
   function animateLeaves(now) {
@@ -1113,7 +1110,7 @@
     // Fewer on mobile (2 on mobile, 4 on desktop)
     const isMobile = window.innerWidth <= 768;
     const count = isMobile ? 2 : 4;
-    const sprites = ['assets/leaf-plum.png', 'assets/leaf-gold.png', 'assets/leaf-olive.png', 'assets/leaf-amber.png'];
+    const sprites = ['assets/leaf-plum.png', 'assets/leaf-gold.png', 'assets/leaf-plum.png', 'assets/leaf-amber.png'];
 
     container.innerHTML = '';
     const leavesData = [];
