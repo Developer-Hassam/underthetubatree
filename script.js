@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Under The Tuba Tree — Full Homepage Script
+ * Under The Tuba Tree, Full Homepage Script
  * Moonlit Night Theme · Vanilla JS · Canvas Leaves · Intro Timeline
  * ============================================================================
  */
@@ -9,9 +9,256 @@
   'use strict';
 
   // ==========================================================================
-  // 1. CONFIGURATION OBJECT — Tune all values here
+  // FALLING LEAVES CONFIGURATION (Hero Background Tuning)
+  // Expose leaf tuning parameters cleanly at the top of script.js
+  // ==========================================================================
+  const LEAVES_CONFIG = {
+    leafCountDesktop: 28,      // Total leaves on desktop (28)
+    leafCountMobile: 12,       // Total leaves on mobile (12: clipped to visible right stage)
+    fallSpeedMultiplier: 1.3,  // Fall speed multiplier (+30% natural fall speed)
+    startDelay: 400,           // Delay in ms before leaves begin (0.4s = 400ms)
+    // Canopy foliage spawn zones in stage percentages (x: 30-98%, y: 5-34%)
+    // Covers the natural foliage arch and branch canopy across the artwork
+    spawnZones: [
+      { xMin: 30, xMax: 54, yMin: 8, yMax: 26 },  // Left canopy bough
+      { xMin: 48, xMax: 78, yMin: 5, yMax: 32 },  // Center blossoms & high canopy
+      { xMin: 72, xMax: 98, yMin: 6, yMax: 34 }   // Right bough & outer canopy
+    ]
+  };
+  const { leafCountDesktop, leafCountMobile, fallSpeedMultiplier, startDelay } = LEAVES_CONFIG;
+
+  // ==========================================================================
+  // HERO ARTWORK & READER CONFIGURATION
+  // • artworkHeightMobile: clamp(380px, 58svh, 540px)
+  // • reader position: right 1.5%, bottom 3%, left 'auto', width 20%
+  // ==========================================================================
+  const HERO_ARTWORK_CONFIG = {
+    heightMobile: 'clamp(380px, 58svh, 540px)'
+  };
+
+  const READER_CONFIG = {
+    desktop: {
+      right: 1.5,   // Distance from stage right edge (1.5%)
+      bottom: 'calc(72px + 24px)', // Distance from stage bottom edge: ends at least 24px above 72px wave
+      left: 'auto', // Left auto
+      width: 20.0   // Width as % of stage width (20%)
+    },
+    mobile: {
+      right: 1.5,   // Same stage percentages as desktop: right 1.5%
+      bottom: '60px', // 36px wave + 24px buffer = 60px clearance
+      left: 'auto', // left auto
+      width: 20.0   // width 20%
+    },
+    introDelayMs: 3800
+  };
+
+  // ==========================================================================
+  // NEWSLETTER CONFIGURATION (MailerLite / Email Provider Integration)
+  // Plug in your MailerLite form endpoint URL here when ready.
+  // While endpoint is empty, the form runs safely in demo mode.
+  // ==========================================================================
+  const NEWSLETTER_CONFIG = {
+    provider: "MailerLite",
+    endpoint: "",
+    method: "POST"
+  };
+
+  // ==========================================================================
+  // CONTACT FORM CONFIGURATION
+  // Connect your form service endpoint here that delivers to hello@underthetubatree.com.
+  // While endpoint is empty, the form runs safely in demo mode with prefilled mailto fallback.
+  // ==========================================================================
+  const CONTACT_CONFIG = {
+    endpoint: "",
+    method: "POST"
+  };
+
+  // ==========================================================================
+  // 1. SITE CONTENT OBJECT
+  // All editable texts, links, badges, and placeholders live here
+  // ==========================================================================
+  const SITE_CONTENT = {
+    topBar: {
+      tagline: 'Stories • Dreams • Deen',
+      ctaText: 'Join our Story Circle',
+      ctaHref: '#story-circle'
+    },
+    navigation: [
+      { label: 'Home', href: '#top' },
+      { label: 'Our Books', href: '#explore' },
+      { label: 'The Story Garden', href: '#story-garden' },
+      { label: 'Meet the Author', href: '#author' },
+      { label: 'Contact', href: '#contact' }
+    ],
+    hero: {
+      showIntroLine: false,
+      introLine: 'Every leaf holds a story...',
+      headline: 'Where Stories Take Root',
+      brand: 'Under The Tuba Tree',
+      tagline: 'Stories that grow from the heart.',
+      intro: 'Welcome beneath our tree, where imagination blooms, stories take root and every little heart has a place to belong.',
+      btnExploreText: 'Explore Our Stories',
+      btnExploreHref: '#explore',
+      btnAuthorText: 'Meet the Author',
+      btnAuthorHref: '#author'
+    },
+    explore: {
+      heading: 'Explore Our Stories',
+      intro: 'Every story has a little something to share. Discover stories that nurture hearts, celebrate our roots and bring imagination to life.',
+      cards: [
+        {
+          id: 'heartfelt-stories',
+          title: 'Heartfelt Stories',
+          desc: 'Stories about love, family, hope, loss and the feelings that connect us.',
+          featuring: 'Featuring Whispers from Jannah',
+          badge: 'Our first book',
+          badgeType: 'published',
+          href: '#featured-book',
+          image: 'assets/heartfelt-stories.webp',
+          imageAlt: 'A mother and her little girl hugging in a golden garden',
+          imageContain: false,
+          imgWidth: 800,
+          imgHeight: 600
+        },
+        {
+          id: 'little-roots',
+          title: 'Little Roots',
+          desc: 'Pakistani childhood, cousin adventures, family traditions and imaginative tales.',
+          badge: 'In development',
+          badgeType: 'upcoming',
+          href: '#little-roots',
+          image: 'assets/images/little-roots.png',
+          imageAlt: 'Children playing in a sunny Pakistani courtyard under a mango tree',
+          imageContain: false,
+          imgWidth: 800,
+          imgHeight: 600
+        },
+        {
+          id: 'dreams-deen',
+          title: 'Dreams \u0026 Deen',
+          desc: 'Stories inspired by faith, kindness, Islamic values and childhood imagination.',
+          badge: 'A future direction',
+          badgeType: 'upcoming',
+          href: '#story-garden',
+          image: 'assets/images/dreams-deen.png',
+          imageAlt: 'Books and a glowing lantern on a prayer mat under a moonlit sky',
+          imageContain: false,
+          imgWidth: 800,
+          imgHeight: 600
+        }
+      ]
+    },
+    featuredBook: {
+      label: 'Featured book',
+      heading: 'Our First Little Story',
+      title: 'Whispers from Jannah',
+      coverImage: 'assets/cover.jpg',
+      coverAlt: 'Whispers from Jannah book cover',
+      paragraphs: [
+        'A tender story of love, loss, faith and hope. Whispers from Jannah offers a gentle perspective on the comfort of knowing our loved ones are safe in Jannah.',
+        'A heartfelt story created to offer comfort and open meaningful conversations about love, loss and remembrance.'
+      ],
+      themesLabel: 'Themes explored',
+      themes: ['Love', 'Loss', 'Faith', 'Hope', 'Remembrance'],
+      audienceLabel: 'Who it is for',
+      audienceText: 'A gentle, heartfelt story that can help families approach difficult emotions and conversations. Ages 4 to 8, also ideal for parent or caregiver read-aloud.',
+      buyUrl: '',
+      btnCopyText: 'Get your copy',
+      btnCopyDisabledText: 'Coming soon',
+      btnCopyDisabledNote: 'Purchase link coming soon',
+      btnInsideText: 'Look inside',
+      lookInsideHeading: 'A glimpse inside Whispers from Jannah',
+      lookInsideNote: 'Preview artwork. The full story is in the book.',
+      lookInsideImages: [
+        'assets/look-inside-1.webp',
+        'assets/look-inside-2.webp',
+        'assets/look-inside-3.webp'
+      ]
+    },
+    storyGarden: {
+      heading: "What\u2019s Growing Beneath Our Tree?",
+      subtitle: 'Every story begins with a seed. Here\u2019s what we\u2019re nurturing.'
+    },
+    littleRoots: {
+      label: 'Pakistani Stories Collection',
+      heading: 'Little Roots',
+      tagline: 'Little stories. Big roots. A lifetime of memories.',
+      question: 'What does growing up Pakistani feel like?',
+      paragraph1: 'It\'s endless cousin adventures, summer afternoons beneath mango trees, family gatherings filled with laughter, familiar traditions and whispered stories that make bedtime a little more magical.',
+      paragraph2: 'Little Roots is a growing collection celebrating the beauty of Pakistani childhood through stories filled with culture, family, imagination and faith.',
+      exploreTitle: 'The collection may explore:',
+      exploreItems: [
+        'Pakistani childhood memories.',
+        'Cousin adventures.',
+        'Family traditions.',
+        'Imaginative jinn tales.',
+        'Cultural celebrations.',
+        'Islamic values woven into everyday stories.'
+      ],
+      badge: 'In Development',
+      statusLine: 'In Development',
+      btnText: 'Follow along in our Story Circle',
+      btnHref: '#story-circle',
+      image: 'assets/little-roots.webp',
+      imageAlt: 'Children playing beneath a mango tree in a warm Pakistani courtyard'
+    },
+    author: {
+      heading: 'Meet Tuba Seyal',
+      tagline: 'Author. Storyteller. Dreamer.',
+      image: 'assets/author.webp',
+      imageAlt: 'Tuba Seyal',
+      greeting: 'Welcome beneath my tree!',
+      p1: "I'm Tuba Seyal, the author behind Under The Tuba Tree, a little world created from a love of stories, meaningful connections and the magic of childhood.",
+      p2: 'My hope is to create stories that reach beyond the pages, stories that nurture imagination, celebrate cultural roots, explore faith and offer comfort to little hearts.',
+      p3: 'From heartfelt stories like Whispers from Jannah to the adventures taking root in Little Roots, I believe every child deserves stories that make them feel seen, connected and inspired.',
+      p4: 'Thank you for being part of this growing story.',
+      signature: 'With love, Tuba.',
+      bioTitle: 'Short biography',
+      bioText: 'Tuba Seyal is the author behind Under The Tuba Tree, a little world created from a love of stories, meaningful connections, and the magic of childhood. Through her writing, Tuba hopes to create stories that reach beyond the pages, stories that nurture imagination, celebrate cultural roots, explore faith, and offer comfort to little hearts. From heartfelt stories like Whispers from Jannah to the adventures taking root in the Little Roots collection, she believes every child deserves stories that make them feel seen, connected, and inspired. Welcome beneath the tree.',
+      btnStoryText: 'Read My Story',
+      btnStoryHref: 'author.html'
+    },
+    storyCircle: {
+      heading: 'Join Our Story Circle',
+      subtitle: "Let's grow a little garden of stories together.",
+      paragraph: 'Be the first to hear about new books, upcoming collections, behind-the-scenes moments and little announcements from beneath our tree.',
+      buttonText: 'Subscribe',
+      consentText: 'I agree to receive emails from Under The Tuba Tree. I can unsubscribe at any time. Read our Privacy Policy.',
+      privacyNote: 'We respect your privacy. We will never share your email.',
+      successMessage: 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.',
+      errorMessage: 'Please enter a valid email address.'
+    },
+    social: {
+      instagram: 'https://instagram.com/underthetubatree',
+      facebook: ''
+    },
+    footer: {
+      tagline: 'Stories that grow from the heart.',
+      email: 'hello@underthetubatree.com',
+      closingLine: 'Thank you for spending a little time beneath our tree.',
+      copyright: '© 2026 Tuba Seyal. All rights reserved.',
+      privacyPolicy: 'Privacy Policy'
+    }
+  };
+
+  // ==========================================================================
+  // 2. CONFIGURATION OBJECT, Animation, stage and particle values
   // ==========================================================================
   const CONFIG = {
+    newsletter: NEWSLETTER_CONFIG,
+    contact: CONTACT_CONFIG,
+    // ------------------------------------------------------------------------
+    // Falling Leaves Tuning Parameters (mapped from top-level LEAVES_CONFIG):
+    // • leafCountDesktop:    Total leaves on desktop (28)
+    // • leafCountMobile:     Total leaves on mobile (14)
+    // • fallSpeedMultiplier: Speed multiplier for falling leaves (1.3 = +30%)
+    // • startDelay:          Start delay in ms before leaves appear (400 = 0.4s)
+    // ------------------------------------------------------------------------
+    leafCountDesktop: LEAVES_CONFIG.leafCountDesktop,
+    leafCountMobile: LEAVES_CONFIG.leafCountMobile,
+    fallSpeedMultiplier: LEAVES_CONFIG.fallSpeedMultiplier,
+    startDelay: LEAVES_CONFIG.startDelay,
+
     mouseParallaxMaxPx: 8,
 
     // Lantern Glow Positions (% of stage coordinate space)
@@ -24,19 +271,9 @@
     ],
 
     // Reader Character (% of stage coordinate space)
-    reader: {
-      desktop: { left: 66, bottom: 4, width: 31 },
-      mobile:  { left: 69, bottom: 8.5, width: 25 },
-      introDelayMs: 3800
-    },
+    reader: READER_CONFIG,
 
-    // Falling Leaves
-    leafCounts: {
-      desktop: 20,
-      mobile: 13
-    },
-
-    // 8 leaf sprites — distribution rules applied in LeafParticle.reset()
+    // 8 leaf sprites, distribution rules applied in LeafParticle.reset()
     sprites: [
       { id: 'gold',       src: 'assets/leaf-gold.png',       dark: false },
       { id: 'olive',      src: 'assets/leaf-olive.png',      dark: false },
@@ -56,188 +293,22 @@
 
     // Intro timings (ms)
     stage: {
-      leavesStartMs:    2000,
-      taglineMs:        3200,
-      readerMs:         3800,
-      headlineMs:       4200,
-      signatureMs:      4200,
-      buttonMs:         5500,
-      introEndMs:       6200
+      leavesStartMs:    400,
+      headlineMs:       1200,
+      brandMs:          2000,
+      readerMs:         2400,
+      taglineMs:        2600,
+      introParaMs:      3200,
+      buttonMs:         3800,
+      introEndMs:       4400
     },
 
     firefliesCount: 18,
     storageKeyIntro: 'under_tuba_tree_intro_played'
   };
 
-  // ==========================================================================
-  // 2. UPCOMING COLLECTIONS CONFIGURATION (The Story Garden)
-  // Adding a new book or collection takes 30 seconds: just add one object here!
-  // Properties: (id, title, badge, desc, tags, sprite, actionText, actionType, actionHref)
-  // ==========================================================================
-  const UPCOMING_COLLECTIONS = [
-    {
-      id: 'family-adventures',
-      title: 'Family Adventures [to confirm]',
-      badge: 'In Development',
-      badgeClass: 'coming',
-      desc: 'Heartwarming stories celebrating family bonds, sibling love, outdoor play, and the joyful everyday moments that turn into lifelong memories.',
-      tags: ['Family bonds', 'Sibling adventures', 'Everyday joy'],
-      sprite: 'assets/leaf-gold.png',
-      actionText: 'Notify me when ready',
-      actionType: 'notify',
-      actionHref: ''
-    },
-    {
-      id: 'islamic-storytelling',
-      title: 'Islamic Storytelling [to confirm]',
-      badge: 'In Development',
-      badgeClass: 'coming',
-      desc: 'Gentle, engaging stories rooted in Prophetic wisdom, compassion, thankfulness, and moral courage, crafted for curious young hearts.',
-      tags: ['Islamic values', 'Prophetic wisdom', 'Kindness'],
-      sprite: 'assets/leaf-green.png',
-      actionText: 'Notify me when ready',
-      actionType: 'notify',
-      actionHref: ''
-    },
-    {
-      id: 'imaginative-tales',
-      title: 'Imaginative Tales [to confirm]',
-      badge: 'In Development',
-      badgeClass: 'coming',
-      desc: 'Whimsical bedtime adventures filled with wonder, imagination, and gentle lessons that inspire sweet dreams and curiosity.',
-      tags: ['Bedtime stories', 'Wonder', 'Creativity'],
-      sprite: 'assets/leaf-plum.png',
-      actionText: 'Notify me when ready',
-      actionType: 'notify',
-      actionHref: ''
-    },
-    {
-      id: 'story-circle-seed',
-      title: 'More Stories Growing',
-      badge: 'The Story Circle',
-      badgeClass: 'invite',
-      desc: 'Our story tree is always blossoming with new ideas. Join our Story Circle to be the first to see manuscript previews, cover reveals and launch dates.',
-      tags: ['Early previews', 'Author notes', 'New releases'],
-      sprite: 'assets/leaf-amber.png',
-      actionText: 'Join our Story Circle',
-      actionType: 'link',
-      actionHref: '#newsletter'
-    }
-  ];
-
-  // ==========================================================================
-  // 2b. EXPLORE NAVIGATION CARDS — Update titles/descriptions here
-  // ==========================================================================
-  const NAV_CARDS = [
-    {
-      title: 'Our Books',
-      desc: 'Discover meaningful children\'s stories.',
-      href: '#featured-book',
-      // Book icon SVG
-      icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C49A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg>'
-    },
-    {
-      title: 'The Story Garden',
-      desc: 'Explore upcoming books and collections.',
-      href: '#story-garden',
-      // Tree icon SVG
-      icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C49A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M8 22h8"/><path d="M12 12c-3.5 0-6-2.5-6-6 0-2.5 2-4 4-4 1 0 1.5.5 2 1 .5-.5 1-1 2-1 2 0 4 1.5 4 4 0 3.5-2.5 6-6 6z"/><path d="M8 14c-1.5.5-3 .5-4-1"/><path d="M16 14c1.5.5 3 .5 4-1"/></svg>'
-    },
-    {
-      title: 'Meet the Author',
-      desc: 'Learn about Tuba Seyal.',
-      href: '#about',
-      // Heart + feather icon SVG
-      icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C49A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
-    },
-    {
-      title: 'Little Readers\' Corner',
-      desc: 'Activities, reading resources and creative downloads.',
-      href: '#readers-corner',
-      // Star icon SVG
-      icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C49A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
-    }
-  ];
-
-  // ==========================================================================
-  // 2c. LITTLE READERS' CORNER DATA — Easy to update downloads and resources
-  // ==========================================================================
-  const READERS_CORNER_RESOURCES = [
-    {
-      id: 'coloring-pages',
-      title: 'Free Coloring Pages',
-      desc: 'Bring the stories to life with beautiful printable character and scene sheets designed for little hands.',
-      status: 'download',
-      badge: 'Free Download',
-      buttonText: 'Download',
-      buttonHref: '#',
-      // Custom line illustration: Crayon and leaf (Gold #C49A58 and Deep Plum #542D45)
-      illustration: `
-        <svg class="readers-tile__svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Crayon in Deep Plum -->
-          <path d="M22 60 L18 64 L20 54 L44 30 L52 38 Z" stroke="#542D45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M18 64 L22 60" stroke="#542D45" stroke-width="2.2"/>
-          <path d="M40 34 L48 42" stroke="#542D45" stroke-width="1.8"/>
-          <!-- Crayon tip stripes -->
-          <path d="M27 47 L35 55" stroke="#C49A58" stroke-width="1.8" stroke-dasharray="2 2"/>
-          <!-- Delicate leaf in Gold -->
-          <path d="M38 46 C38 32 54 22 66 18 C64 30 56 46 42 46 Z" stroke="#C49A58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M38 46 C48 38 56 30 66 18" stroke="#C49A58" stroke-width="1.8" stroke-linecap="round"/>
-          <!-- Little decorative sparkles -->
-          <circle cx="58" cy="46" r="1.5" fill="#C49A58"/>
-          <circle cx="28" cy="24" r="1.5" fill="#C49A58"/>
-        </svg>
-      `
-    },
-    {
-      id: 'reading-activities',
-      title: 'Reading Activities',
-      desc: 'Thoughtful guided questions, story maps and playful discussions to deepen connection with every book.',
-      status: 'coming',
-      badge: 'Coming Soon',
-      buttonText: 'Coming Soon',
-      buttonHref: '#',
-      // Custom line illustration: Open book with a shining star (Gold #C49A58 and Deep Plum #542D45)
-      illustration: `
-        <svg class="readers-tile__svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Open book in Deep Plum -->
-          <path d="M40 58 C32 54 22 54 14 56 L14 26 C22 24 32 24 40 28 C48 24 58 24 66 26 L66 56 C58 54 48 54 40 58 Z" stroke="#542D45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M40 28 L40 58" stroke="#542D45" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Book page lines -->
-          <path d="M20 34 C26 33 32 34 35 36" stroke="#542D45" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M20 42 C26 41 32 42 35 44" stroke="#542D45" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M45 36 C48 34 54 33 60 34" stroke="#542D45" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M45 44 C48 42 54 41 60 42" stroke="#542D45" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- Rising five-pointed star in Gold -->
-          <path d="M40 10 L42.5 17 L50 17 L44 21.5 L46.5 28.5 L40 24 L33.5 28.5 L36 21.5 L30 17 L37.5 17 Z" stroke="#C49A58" stroke-width="2" stroke-linejoin="round"/>
-        </svg>
-      `
-    },
-    {
-      id: 'educator-resources',
-      title: 'Parent and Educator Resources',
-      desc: 'Gentle discussion guides, grief support tools and family reading prompts crafted for meaningful moments.',
-      status: 'coming',
-      badge: 'Coming Soon',
-      buttonText: 'Coming Soon',
-      buttonHref: '#',
-      // Custom line illustration: Two caring figures and a shared book (Gold #C49A58 and Deep Plum #542D45)
-      illustration: `
-        <svg class="readers-tile__svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Parent figure (left) -->
-          <circle cx="28" cy="22" r="5" stroke="#542D45" stroke-width="2.2"/>
-          <path d="M18 42 C18 34 22 30 28 30 C31 30 33 31 35 33" stroke="#542D45" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Child figure (right) -->
-          <circle cx="48" cy="28" r="4.2" stroke="#C49A58" stroke-width="2"/>
-          <path d="M41 44 C41 38 44 35 48 35 C52 35 55 38 55 44" stroke="#C49A58" stroke-width="2" stroke-linecap="round"/>
-          <!-- Shared open book below in Gold and Plum -->
-          <path d="M38 60 C30 56 22 56 16 58 L16 46 C22 44 30 44 38 48 C46 44 54 44 60 46 L60 58 C54 56 46 56 38 60 Z" stroke="#C49A58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M38 48 L38 60" stroke="#C49A58" stroke-width="2.2"/>
-          <path d="M28 30 C32 30 36 33 37 38" stroke="#542D45" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2 3"/>
-        </svg>
-      `
-    }
-  ];
+  const STORY_GARDEN_LEAVES = SITE_CONTENT.storyGarden.leaves;
+  const EXPLORE_CARDS = SITE_CONTENT.explore.cards;
 
   // ==========================================================================
   // 3. DOM ELEMENTS & STATE
@@ -248,9 +319,10 @@
   const leavesCanvas     = document.getElementById('leavesCanvas');
   const firefliesLayer   = document.getElementById('firefliesLayer');
 
-  const heroTagline      = document.getElementById('heroTagline');
   const heroHeadline     = document.getElementById('heroHeadline');
-  const heroSignature    = document.getElementById('heroSignature');
+  const heroBrand        = document.getElementById('heroBrand');
+  const heroTagline      = document.getElementById('heroTagline');
+  const heroIntro        = document.getElementById('heroIntro');
   const heroAction       = document.getElementById('heroAction');
 
   const menuToggle       = document.getElementById('menuToggle');
@@ -334,11 +406,17 @@
   // ==========================================================================
   function applyReaderPosition() {
     if (!readerCharacter || !CONFIG.reader) return;
-    const isMobile = window.innerWidth < 768;
-    const pos = isMobile ? CONFIG.reader.mobile : CONFIG.reader.desktop;
+    const isDesktop = window.innerWidth >= 900;
+    const pos = isDesktop ? CONFIG.reader.desktop : CONFIG.reader.mobile;
 
-    readerCharacter.style.left   = `${pos.left}%`;
-    readerCharacter.style.bottom = `${pos.bottom}%`;
+    if (pos.right !== undefined && pos.right !== null) {
+      readerCharacter.style.right = (typeof pos.right === 'number') ? `${pos.right}%` : pos.right;
+      readerCharacter.style.left  = (pos.left !== undefined) ? ((typeof pos.left === 'number') ? `${pos.left}%` : pos.left) : 'auto';
+    } else {
+      readerCharacter.style.left  = `${pos.left}%`;
+      readerCharacter.style.right = 'auto';
+    }
+    readerCharacter.style.bottom = (typeof pos.bottom === 'number') ? `${pos.bottom}%` : pos.bottom;
     readerCharacter.style.width  = `${pos.width}%`;
   }
 
@@ -365,45 +443,41 @@
   ];
 
   class LeafParticle {
-    constructor(initialDelayMs = 0, slotIndex = 0) {
+    constructor(slotIndex = 0, initialDelayMs = 0, preSeed = false) {
       this.slotIndex = slotIndex;
       this.delay = initialDelayMs;
-      this.active = false;
-      this.reset();
+      this.active = preSeed;
+      this.reset(preSeed);
     }
 
-    reset() {
+    reset(preSeed = false) {
       this.depth = Math.random();
-
       const isMobile = window.innerWidth <= 768;
-      
-      // Curated diverse leaf palette: Plum included, balanced with Gold, Amber, Olive, Green & Dark Olive
+
+      // Curated palette: plum is rare (~10%), balanced with warm golds, ambers and olives
       const LEAF_PALETTE = [
-        'plum',       // Deep plum
         'gold',       // Warm gold
-        'amber',      // Autumn amber
         'olive',      // Soft olive
-        'plum',       // Deep plum
-        'green',      // Forest green
+        'amber',      // Autumn amber
         'olive2',     // Fresh olive
-        'gold',       // Radiant gold
-        'olive-dark', // Earthy olive
-        'amber'       // Warm amber
+        'plum',       // Deep plum (rare: 10%)
+        'gold',       // Warm gold
+        'green',      // Forest green
+        'amber',      // Warm amber
+        'olive-dark', // Earthy dark olive
+        'gold'        // Radiant gold
       ];
 
-      const baseType = (this.slotIndex !== undefined)
+      const type = (this.slotIndex !== undefined)
         ? LEAF_PALETTE[this.slotIndex % LEAF_PALETTE.length]
         : LEAF_PALETTE[Math.floor(Math.random() * LEAF_PALETTE.length)];
 
-      const type = (Math.random() < 0.85)
-        ? baseType
-        : LEAF_PALETTE[Math.floor(Math.random() * LEAF_PALETTE.length)];
-
       this.type = type;
-      this.img = loadedSprites[type];
+      this.img = loadedSprites[type] || loadedSprites['gold'];
 
+      // Size calculation with depth perspective: far leaves small, near leaves larger
       const minSize = isMobile ? 18 : CONFIG.leafSizeRange.min;
-      const maxSize = isMobile ? 30 : CONFIG.leafSizeRange.max;
+      const maxSize = isMobile ? 28 : CONFIG.leafSizeRange.max;
       const targetSize = minSize + this.depth * (maxSize - minSize);
       const aspect = (this.img && this.img.naturalHeight)
         ? (this.img.naturalWidth / this.img.naturalHeight) : 1;
@@ -411,26 +485,49 @@
       this.width = targetSize * aspect;
       this.height = targetSize;
 
-      // Pick branch node (staggered across canopy, avoiding identical positions)
-      const nodes = isMobile ? MOBILE_BRANCH_NODES : DESKTOP_BRANCH_NODES;
-      const nodeIndex = (this.slotIndex !== undefined)
-        ? (this.slotIndex + Math.floor(Math.random() * (nodes.length - 1) + 1)) % nodes.length
-        : Math.floor(Math.random() * nodes.length);
-      const node = nodes[nodeIndex];
+      // Pick random spawn point from LEAVES_CONFIG.spawnZones
+      const zones = (LEAVES_CONFIG.spawnZones && LEAVES_CONFIG.spawnZones.length > 0)
+        ? LEAVES_CONFIG.spawnZones
+        : [{ xMin: 30, xMax: 98, yMin: 5, yMax: 34 }];
+      const zone = zones[Math.floor(Math.random() * zones.length)];
+      const spawnXPct = zone.xMin + Math.random() * (zone.xMax - zone.xMin);
+      // At least 4 percent below the top edge
+      const spawnYPct = Math.max(4, zone.yMin + Math.random() * (zone.yMax - zone.yMin));
 
-      // Natural jitter around branch tip
-      const xJitter = (Math.random() - 0.5) * 0.08 * (canvasW || 800);
-      const yJitter = (Math.random() - 0.5) * 26;
-      this.x = ((canvasW || 800) * node.xRatio) + xJitter;
-      this.y = ((canvasH || 600) * node.yRatio) + yJitter - this.height;
+      const w = canvasW || window.innerWidth || 1200;
+      const h = canvasH || window.innerHeight || 800;
 
-      // Gentle vertical velocity with subtle depth variance (prevents leaves lining up)
-      this.vy = (0.19 + this.depth * 0.24) * (0.88 + Math.random() * 0.26);
+      if (preSeed) {
+        // Pre-seeded leaves at page load: placed inside the zones or below them (never above tree or in empty sky at left)
+        this.x = (spawnXPct / 100) * w;
+        // From spawn point down to lower canopy / drift corridor (max 72% of stage height)
+        const preSeedYPct = spawnYPct + Math.random() * (72 - spawnYPct);
+        this.y = (Math.max(4, preSeedYPct) / 100) * h;
+        this.scale = 1.0;
+        this.alpha = (type === 'plum') ? 0.85 : (0.42 + this.depth * 0.46);
+        this.fadeIn = false;
+        this.active = true;
+        this.growElapsed = 900;
+      } else {
+        // Detaches from foliage: starts at random point inside zone, at least 4% below top
+        this.x = (spawnXPct / 100) * w;
+        this.y = (spawnYPct / 100) * h;
+        // Starts at opacity 0 and scale 0.6
+        this.alpha = 0;
+        this.scale = 0.6;
+        this.fadeIn = true;
+        this.growElapsed = 0;
+      }
+
+      // Vertical velocity with 30% speed boost (LEAVES_CONFIG.fallSpeedMultiplier = 1.3)
+      const baseVy = (0.22 + this.depth * 0.26) * (0.90 + Math.random() * 0.22);
+      this.vy = baseVy * (LEAVES_CONFIG.fallSpeedMultiplier || 1.3);
 
       // Horizontal drift with gentle branch bias and natural breeze
-      this.vx = (node.swayBias * (0.06 + Math.random() * 0.08)) + (Math.random() - 0.5) * 0.06;
+      const swayBias = (spawnXPct < 60) ? -0.25 : 0.25;
+      this.vx = (swayBias * (0.06 + Math.random() * 0.08)) + (Math.random() - 0.5) * 0.06;
 
-      // Sway & 3D Flip (each leaf has its own independent cadence)
+      // Gentle, natural sway & 3D Flip
       this.swayAngle = Math.random() * Math.PI * 2;
       this.swaySpeed = 0.006 + Math.random() * 0.007;
       this.swayAmp   = 12 + this.depth * 14;
@@ -438,16 +535,13 @@
       this.flipAngle = Math.random() * Math.PI * 2;
       this.flipSpeed = 0.007 + Math.random() * 0.010;
 
-      // Release at branch's natural angle with organic tilt
-      this.rotation = node.baseAngle + (Math.random() - 0.5) * 0.35;
+      this.rotation = (Math.random() - 0.5) * 0.45;
       this.rotSpeed = (Math.random() - 0.5) * 0.004;
 
-      // Opacity: rich and solid for deep plum leaves so they stand out clearly
+      // Opacity: far leaves are more transparent, plum leaf is deep and visible
       this.baseAlpha = (type === 'plum')
-        ? 0.82 + this.depth * 0.18
-        : 0.55 + this.depth * 0.40;
-      this.alpha = 0;
-      this.fadeIn = true;
+        ? 0.85
+        : (0.42 + this.depth * 0.48);
     }
 
     update(dt, windX) {
@@ -465,26 +559,31 @@
       this.x += (this.vx + swayOffset + windX) * dt;
       this.y += this.vy * dt;
 
+      // Over about 0.9s (900ms), fades in to full opacity and grows to full size (scale 0.6 -> 1.0)
       if (this.fadeIn) {
-        this.alpha += 0.016 * dt;
-        if (this.alpha >= this.baseAlpha) {
+        this.growElapsed += dt * 16.666;
+        const progress = Math.min(1, this.growElapsed / 900);
+        this.scale = 0.6 + 0.4 * progress;
+        this.alpha = this.baseAlpha * progress;
+        if (progress >= 1) {
+          this.scale = 1.0;
           this.alpha = this.baseAlpha;
           this.fadeIn = false;
         }
       }
 
       // Ground fade out as leaves settle near roots / moss
-      const groundLine = (canvasH || 600) * 0.86;
+      const groundLine = (canvasH || 600) * 0.88;
       if (this.y > groundLine) {
-        const fadeProgress = (this.y - groundLine) / ((canvasH || 600) * 0.14);
+        const fadeProgress = (this.y - groundLine) / ((canvasH || 600) * 0.12);
         this.alpha = Math.max(0, this.baseAlpha * (1 - fadeProgress));
       }
 
-      // Once landed or drifted out: reset with a random rest interval
+      // When a leaf leaves the stage or reaches the ground line it fades out and respawns inside the zones
       if (this.y > (canvasH || 600) + 30 || this.x < -60 || this.x > (canvasW || 800) + 60 || (this.alpha <= 0 && this.y > groundLine)) {
-        this.reset();
-        // Staggered rest interval: leaves fall one after another, never in synchronized batches
-        this.delay = 1200 + Math.random() * 3800;
+        this.reset(false);
+        // Quicker respawns: at most 0.5s (50ms to 450ms, no long waiting times)
+        this.delay = 50 + Math.random() * 400;
         this.active = false;
       }
     }
@@ -495,8 +594,9 @@
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.rotation);
+      ctx.scale(this.scale, this.scale);
 
-      // Cosine 3D flip — swap to slim sprite when edge-on
+      // Cosine 3D flip, swap to slim sprite when edge-on
       const flipScale = Math.cos(this.flipAngle);
       ctx.scale(Math.abs(flipScale) < 0.15 ? 0.15 : flipScale, 1);
 
@@ -528,26 +628,21 @@
 
   function initLeaves() {
     const isMobile = window.innerWidth <= 768;
-    const targetCount = isMobile ? CONFIG.leafCounts.mobile : CONFIG.leafCounts.desktop;
+    const targetCount = isMobile ? LEAVES_CONFIG.leafCountMobile : LEAVES_CONFIG.leafCountDesktop;
     leaves = [];
 
-    // First 3 or 4 leaves start falling sequentially from distinct branch points,
-    // followed by staggered releases so leaves never drop in clustered batches
+    // Pre-seed 40% of leaves right away across upper 2/3 of stage
+    const preSeedCount = Math.floor(targetCount * 0.40);
+
     for (let i = 0; i < targetCount; i++) {
-      let initialDelay;
-      if (i === 0) {
-        initialDelay = 0;     // 1st leaf drops immediately from Branch 1
-      } else if (i === 1) {
-        initialDelay = 650;   // 2nd leaf drops from Branch 3
-      } else if (i === 2) {
-        initialDelay = 1500;  // 3rd leaf drops from Branch 5
-      } else if (i === 3) {
-        initialDelay = 2500;  // 4th leaf drops from Branch 2
+      if (i < preSeedCount) {
+        // Pre-seeded: immediately active and placed in upper 2/3
+        leaves.push(new LeafParticle(i, 0, true));
       } else {
-        // Subsequent leaves gently space out over time
-        initialDelay = 3600 + (i - 4) * 1400 + Math.random() * 700;
+        // Remaining 60%: start within 1.5 seconds (0.1s to 1.5s staggered)
+        const delayMs = ((i - preSeedCount) / Math.max(1, targetCount - preSeedCount)) * 1500;
+        leaves.push(new LeafParticle(i, delayMs, false));
       }
-      leaves.push(new LeafParticle(initialDelay, i));
     }
     window.__tubaLeaves = leaves;
   }
@@ -579,217 +674,438 @@
         leaf.update(delta, totalWind);
         leaf.render(ctx);
       });
+
+      // ?debug mode: draw translucent rectangles for canopy spawn zones on stage
+      const isDebug = window.location.search.includes('debug');
+      if (isDebug) {
+        ctx.save();
+        const zones = (LEAVES_CONFIG.spawnZones && LEAVES_CONFIG.spawnZones.length > 0)
+          ? LEAVES_CONFIG.spawnZones
+          : [{ xMin: 30, xMax: 98, yMin: 5, yMax: 34 }];
+        zones.forEach((z, idx) => {
+          const zx = (z.xMin / 100) * canvasW;
+          const zy = (z.yMin / 100) * canvasH;
+          const zw = ((z.xMax - z.xMin) / 100) * canvasW;
+          const zh = ((z.yMax - z.yMin) / 100) * canvasH;
+          ctx.fillStyle = 'rgba(232, 211, 161, 0.22)';
+          ctx.fillRect(zx, zy, zw, zh);
+          ctx.strokeStyle = 'rgba(255, 225, 140, 0.85)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(zx, zy, zw, zh);
+          ctx.fillStyle = '#FFF9F2';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillText(`Canopy Zone ${idx + 1}: x[${z.xMin}-${z.xMax}%] y[${z.yMin}-${z.yMax}%]`, zx + 8, zy + 18);
+        });
+        ctx.restore();
+      }
     }
 
     requestAnimationFrame(animateLeaves);
   }
 
   // ==========================================================================
-  // 8. THE STORY GARDEN — UPCOMING COLLECTIONS
-  // Easily extensible: update or add entries to UPCOMING_COLLECTIONS array
+  // 8. THE STORY GARDEN: 3 GROWTH CARDS (Bloom, Sprout, Seed)
   // ==========================================================================
-  function renderStoryGardenUpcoming() {
-    const grid = document.getElementById('sgCollectionsGrid');
-    if (!grid || typeof UPCOMING_COLLECTIONS === 'undefined') return;
+  // Client Content & Config (exposed at the top of the section script)
+  const gardenItems = [
+    {
+      stage: 'bloom',
+      badge: 'Our first book',
+      title: 'Whispers from Jannah',
+      text: 'A heartfelt story about love, loss, faith and hope.',
+      buttonLabel: 'Learn about the book',
+      href: '#featured-book'
+    },
+    {
+      stage: 'sprout',
+      badge: 'In development',
+      title: 'Little Roots: Pakistani Stories Collection',
+      text: 'A growing collection celebrating the beauty of Pakistani childhood.',
+      buttonLabel: 'Discover Little Roots',
+      href: '#little-roots'
+    },
+    {
+      stage: 'seed',
+      badge: 'Future ideas',
+      title: 'More Stories Under the Tree',
+      text: 'New adventures, meaningful lessons and imaginative worlds waiting to grow.',
+      buttonLabel: null,
+      href: null
+    }
+  ];
 
-    grid.innerHTML = '';
+  // Expose configuration globally for fine-tuning without touching markup
+  window.gardenItems = gardenItems;
 
-    UPCOMING_COLLECTIONS.forEach(col => {
-      const card = document.createElement('article');
-      card.className = `sg-card ${col.badgeClass === 'invite' ? 'sg-card--invite' : ''}`;
-      card.setAttribute('aria-label', col.title);
-
-      const tagsHtml = (col.tags && col.tags.length > 0)
-        ? `<div class="sg-card__tags">${col.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`
-        : '';
-
-      const actionHtml = col.actionType === 'link'
-        ? `<a href="${col.actionHref}" class="btn-gold">${col.actionText}</a>`
-        : `<button type="button" class="btn-outline sg-notify-trigger" data-title="${encodeURIComponent(col.title)}">${col.actionText}</button>`;
-
-      card.innerHTML = `
-        <div class="sg-card__top">
-          <div class="sg-card__header">
-            <span class="sg-card__badge ${col.badgeClass === 'invite' ? 'sg-card__badge--invite' : ''}">${col.badge}</span>
-            <img src="${col.sprite}" alt="" class="sg-card__leaf-icon" aria-hidden="true" width="32" height="32">
-          </div>
-          <h4 class="sg-card__title">${col.title}</h4>
-          <p class="sg-card__desc">${col.desc}</p>
-          ${tagsHtml}
-        </div>
-        <div class="sg-card__action">
-          ${actionHtml}
-        </div>
+  // Inline painterly SVG illustrations for each growth stage
+  function getStageSvg(stage) {
+    if (stage === 'bloom') {
+      return `
+        <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Soft gold glow circle behind blossom -->
+          <circle cx="70" cy="52" r="44" fill="rgba(201, 162, 90, 0.22)"/>
+          <!-- Short stem with 3 leaves -->
+          <path d="M70 122 C70 98 68 76 70 58" stroke="#4F6B47" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M69 102 C50 98 45 82 50 74 C60 78 68 90 69 102 Z" fill="#7C9A6D"/>
+          <path d="M71 92 C90 88 94 74 90 66 C80 70 72 80 71 92 Z" fill="#7C9A6D"/>
+          <path d="M70 78 C56 72 52 60 58 54 C66 58 70 68 70 78 Z" fill="#4F6B47"/>
+          <!-- Blossom with gentle desktop sway -->
+          <g class="sg-svg-sway-bloom">
+            <!-- 5 Blush Petals -->
+            <path d="M70 50 C60 36 64 24 70 24 C76 24 80 36 70 50 Z" fill="#E8A9B8"/>
+            <path d="M70 50 C84 40 96 44 96 50 C96 56 84 60 70 50 Z" fill="#EFAAB9"/>
+            <path d="M70 50 C80 64 76 76 70 76 C64 76 60 64 70 50 Z" fill="#E8A9B8"/>
+            <path d="M70 50 C56 60 44 56 44 50 C44 44 56 40 70 50 Z" fill="#F4BCC8"/>
+            <path d="M70 50 C54 38 60 28 68 34 C72 38 72 46 70 50 Z" fill="#E29DAE"/>
+            <path d="M70 50 C86 38 80 28 72 34 C68 38 68 46 70 50 Z" fill="#F0B5C2"/>
+            <!-- Antique Gold Centre -->
+            <circle cx="70" cy="50" r="10" fill="#C9A25A"/>
+            <circle cx="70" cy="50" r="7" fill="#DDBB7A"/>
+            <circle cx="68" cy="48" r="2" fill="#FFF9F2" opacity="0.8"/>
+          </g>
+        </svg>
       `;
-
-      grid.appendChild(card);
-    });
-
-    // Attach click listeners to all notify buttons in Section 5
-    const notifyTriggers = document.querySelectorAll('.sg-notify-trigger');
-    notifyTriggers.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const title = decodeURIComponent(btn.dataset.title || 'Upcoming Stories');
-        openNotifyModal(title);
-      });
-    });
-  }
-
-  // ==========================================================================
-  // 8b. NOTIFY MODAL
-  // ==========================================================================
-  let lastFocusedBeforeModal = null;
-
-  function openNotifyModal(bookTitle) {
-    const modal = document.getElementById('notifyModal');
-    const heading = document.getElementById('notifyHeading');
-    const desc = document.getElementById('notifyDesc');
-    const input = document.getElementById('notifyEmail');
-    const successMsg = document.getElementById('notifySuccess');
-    const form = document.getElementById('notifyForm');
-    if (!modal) return;
-
-    lastFocusedBeforeModal = document.activeElement;
-
-    if (heading) heading.textContent = `Get Notified`;
-    if (desc) desc.textContent = `We will let you know as soon as "${bookTitle}" is ready.`;
-    if (input) {
-      input.value = '';
     }
-    if (successMsg) successMsg.hidden = true;
-    if (form) form.hidden = false;
-
-    modal.hidden = false;
-
-    setTimeout(() => {
-      if (input) input.focus();
-    }, 50);
-
-    document.addEventListener('keydown', handleNotifyModalKeydown);
-  }
-
-  function closeNotifyModal() {
-    const modal = document.getElementById('notifyModal');
-    if (!modal) return;
-    modal.hidden = true;
-    document.removeEventListener('keydown', handleNotifyModalKeydown);
-
-    if (lastFocusedBeforeModal) {
-      lastFocusedBeforeModal.focus();
-      lastFocusedBeforeModal = null;
+    if (stage === 'sprout') {
+      return `
+        <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Soil mound -->
+          <ellipse cx="70" cy="116" rx="46" ry="14" fill="#8A5A3C"/>
+          <ellipse cx="70" cy="118" rx="38" ry="10" fill="#73472A"/>
+          <path d="M38 116 Q70 106 102 116" stroke="#5E3820" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <!-- Sprout with gentle desktop sway -->
+          <g class="sg-svg-sway-sprout">
+            <!-- Young stem -->
+            <path d="M70 114 C70 94 69 76 70 62" stroke="#4F6B47" stroke-width="4.5" stroke-linecap="round"/>
+            <!-- 2 Fresh sage leaves -->
+            <path d="M70 82 C50 74 46 54 56 46 C68 52 70 70 70 82 Z" fill="#7C9A6D"/>
+            <path d="M60 62 C65 67 68 74 70 80" stroke="#5B7E4C" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M70 74 C90 66 94 46 84 38 C72 44 70 62 70 74 Z" fill="#4F6B47"/>
+            <path d="M80 54 C75 59 72 66 70 72" stroke="#3D5537" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <!-- Tiny tender bud top -->
+            <circle cx="70" cy="60" r="3" fill="#C9A25A"/>
+          </g>
+        </svg>
+      `;
     }
+    // stage === 'seed'
+    return `
+      <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- 3 Tiny sparkle dots above seed (animated fade on desktop) -->
+        <g class="sg-svg-sparkles">
+          <!-- Sparkle 1 (centre top) -->
+          <polygon points="70,44 72,51 79,53 72,55 70,62 68,55 61,53 68,51" fill="#C9A25A"/>
+          <!-- Sparkle 2 (left) -->
+          <polygon points="48,58 49.5,62 54,63 49.5,64 48,68 46.5,64 42,63 46.5,62" fill="#E8D3A1"/>
+          <!-- Sparkle 3 (right) -->
+          <polygon points="92,62 93.5,66 98,67 93.5,68 92,72 90.5,68 86,67 90.5,66" fill="#E8D3A1"/>
+        </g>
+        <!-- Soil mound -->
+        <ellipse cx="70" cy="116" rx="44" ry="14" fill="#8A5A3C"/>
+        <ellipse cx="70" cy="118" rx="36" ry="10" fill="#73472A"/>
+        <path d="M40 116 Q70 108 100 116" stroke="#5E3820" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <!-- Single plump seed resting on top -->
+        <path d="M70 86 C80 86 85 98 85 106 C85 114 78 118 70 118 C62 118 55 114 55 106 C55 98 60 86 70 86 Z" fill="#C9A25A" stroke="#B38637" stroke-width="2"/>
+        <!-- Soft highlight on seed -->
+        <path d="M66 93 C62 98 61 105 63 110" stroke="#FFF9F2" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.75"/>
+        <circle cx="76" cy="100" r="1.5" fill="#DDBB7A"/>
+      </svg>
+    `;
   }
 
-  function handleNotifyModalKeydown(e) {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeNotifyModal();
+  function initStoryGardenCards() {
+    const grid = document.getElementById('sgCardsGrid');
+    const fallingLeavesContainer = document.getElementById('sgFallingLeaves');
+
+    // 1. Decorative slow drifting leaves (at most 5 on desktop, 3 on mobile; z-index lower than cards)
+    if (fallingLeavesContainer) {
+      fallingLeavesContainer.innerHTML = '';
+      const isMobile = window.innerWidth <= 899;
+      const count = isMobile ? 3 : 5;
+      const driftSprites = ['assets/leaf-gold.png', 'assets/leaf-green.png', 'assets/leaf-plum.png'];
+      for (let i = 0; i < count; i++) {
+        const leaf = document.createElement('img');
+        leaf.src = driftSprites[i % driftSprites.length];
+        leaf.className = 'sg-drift-leaf';
+        leaf.alt = '';
+        leaf.setAttribute('aria-hidden', 'true');
+        leaf.style.left = `${12 + i * (isMobile ? 36 : 18)}%`;
+        leaf.style.top = `${-20 + (i % 3) * 10}px`;
+        leaf.style.width = `${isMobile ? 22 : 28}px`;
+        leaf.style.height = 'auto';
+        leaf.style.animationDuration = `${9 + i * 2.5}s`;
+        leaf.style.animationDelay = `${i * 1.8}s`;
+        fallingLeavesContainer.appendChild(leaf);
+      }
+    }
+
+    if (!grid) return;
+
+    // 2. Render cards from gardenItems config
+    const items = window.gardenItems || gardenItems;
+    grid.innerHTML = items.map((item) => {
+      const btnMarkup = item.buttonLabel && item.href
+        ? `<a href="${item.href}" class="sg-card__btn">${item.buttonLabel}</a>`
+        : `<div class="sg-card__spacer" aria-hidden="true"></div>`;
+
+      return `
+        <article class="sg-card sg-card--${item.stage}" aria-label="${item.title}">
+          <div class="sg-card__visual">
+            ${getStageSvg(item.stage)}
+          </div>
+          <div class="sg-card__body">
+            <div class="sg-card__badge-wrap">
+              <span class="sg-card__badge sg-card__badge--${item.stage}">${item.badge}</span>
+            </div>
+            <h3 class="sg-card__title">${item.title}</h3>
+            <p class="sg-card__text">${item.text}</p>
+            ${btnMarkup}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    // 3. Scroll Reveal: cards fade in and rise 16px in sequence (80ms apart)
+    const cards = grid.querySelectorAll('.sg-card');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function showCard(card) {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }
+
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      cards.forEach(showCard);
       return;
     }
 
-    if (e.key === 'Tab') {
-      const card = document.getElementById('notifyCard');
-      if (!card) return;
-      const focusable = card.querySelectorAll('input, button:not([disabled]), [tabindex]:not([tabindex="-1"])');
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+    // Check if section is already in the viewport on load
+    const section = document.getElementById('story-garden');
+    const rect = section ? section.getBoundingClientRect() : null;
+    const isAlreadyInView = rect && (rect.top < window.innerHeight && rect.bottom > 0);
 
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
-
-  function initNotifyModal() {
-    const modal = document.getElementById('notifyModal');
-    const closeBtn = document.getElementById('notifyClose');
-    const backdrop = document.getElementById('notifyBackdrop');
-    const form = document.getElementById('notifyForm');
-    const successMsg = document.getElementById('notifySuccess');
-
-    if (closeBtn) closeBtn.addEventListener('click', closeNotifyModal);
-    if (backdrop) backdrop.addEventListener('click', closeNotifyModal);
-
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        form.hidden = true;
-        if (successMsg) successMsg.hidden = false;
-        setTimeout(() => {
-          closeNotifyModal();
-        }, 2200);
+    if (isAlreadyInView) {
+      cards.forEach((card, idx) => {
+        setTimeout(() => showCard(card), idx * 80);
       });
+    } else {
+      // Initially prepare for reveal
+      cards.forEach((card) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px)';
+        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease, box-shadow 250ms ease';
+      });
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            cards.forEach((card, idx) => {
+              setTimeout(() => showCard(card), idx * 80);
+            });
+            obs.disconnect();
+          }
+        });
+      }, { threshold: 0.15 });
+
+      observer.observe(grid);
     }
   }
-
-
 
   // ==========================================================================
-  // 8b. EXPLORE NAVIGATION CARDS GENERATOR
+  // 8b. EXPLORE ILLUSTRATED CARDS GENERATOR
   // ==========================================================================
   function renderExploreCards() {
     const container = document.getElementById('exploreCards');
     if (!container) return;
 
-    container.innerHTML = NAV_CARDS.map(card => `
-      <a href="${card.href}" class="explore-card">
-        <div class="explore-card__icon">${card.icon}</div>
-        <h3 class="explore-card__title">${card.title}</h3>
-        <p class="explore-card__desc">${card.desc}</p>
-      </a>
-    `).join('');
-  }
+    // Seed icon SVG for upcoming badges
+    const seedIcon = '<svg class="explore-card__seed-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22V12"/><path d="M12 12c-3 0-5-2-5-5s2-4 3.5-4c.8 0 1.2.4 1.5.8.3-.4.7-.8 1.5-.8C15 3 17 4 17 7s-2 5-5 5z"/></svg>';
 
-  // ==========================================================================
-  // 8c. LITTLE READERS' CORNER GENERATOR
-  // ==========================================================================
-  function renderReadersCorner() {
-    const container = document.getElementById('readersTiles');
-    if (!container) return;
-
-    container.innerHTML = READERS_CORNER_RESOURCES.map(res => {
-      const isComingSoon = res.status === 'coming';
-      const badgeClass = isComingSoon ? 'readers-tile__badge--coming' : 'readers-tile__badge--download';
-      const buttonClass = isComingSoon ? 'btn-outline readers-tile__btn--disabled' : 'btn-gold';
-      const buttonAttr = isComingSoon ? 'aria-disabled="true"' : '';
+    container.innerHTML = EXPLORE_CARDS.map(card => {
+      const isUpcoming = card.badgeType === 'upcoming';
+      const badgeClass = isUpcoming ? 'explore-card__badge--upcoming' : 'explore-card__badge--published';
+      const badgeContent = isUpcoming ? `${seedIcon} ${card.badge}` : card.badge;
+      const imageClass = card.imageContain ? ' explore-card__img--contain' : '';
+      const featuringLine = card.featuring ? `<p class="explore-card__featuring">${card.featuring}</p>` : '';
 
       return `
-        <article class="readers-tile" aria-labelledby="readers-tile-title-${res.id}">
-          <div class="readers-tile__header">
-            <div class="readers-tile__illustration">
-              ${res.illustration}
-            </div>
-            <span class="readers-tile__badge ${badgeClass}">${res.badge}</span>
+        <a href="${card.href}" class="explore-card reveal-on-scroll${isUpcoming ? ' explore-card--upcoming' : ''}">
+          <div class="explore-card__img-wrap${card.imageContain ? ' explore-card__img-wrap--sage' : ''}">
+            <img
+              src="${card.image}"
+              alt="${card.imageAlt}"
+              class="explore-card__img${imageClass}"
+              width="${card.imgWidth}"
+              height="${card.imgHeight}"
+              loading="lazy"
+            />
           </div>
-          <h3 class="readers-tile__title" id="readers-tile-title-${res.id}">${res.title}</h3>
-          <p class="readers-tile__desc">${res.desc}</p>
-          <div class="readers-tile__action">
-            <a href="${res.buttonHref}" class="${buttonClass}" ${buttonAttr}>
-              ${res.buttonText}
-            </a>
+          <div class="explore-card__body">
+            <span class="explore-card__badge ${badgeClass}">${badgeContent}</span>
+            <h3 class="explore-card__title">${card.title}</h3>
+            <p class="explore-card__desc">${card.desc}</p>
+            ${featuringLine}
           </div>
-        </article>
-      `;
+        </a>`;
     }).join('');
   }
 
   // ==========================================================================
-  // 8d. NEWSLETTER FORM (Story Circle Signup with Validation & Feedback)
+  // 8c. FEATURED BOOK: BUY BUTTON STATE + LOOK INSIDE LIGHTBOX
+  // ==========================================================================
+  function initFeaturedBook() {
+    const fb = SITE_CONTENT.featuredBook;
+    const buyBtn = document.getElementById('featuredBookBuyBtn');
+    const buyNote = document.getElementById('featuredBookBuyNote');
+    const buyWrap = document.getElementById('featuredBookBuyWrap');
+
+    // Dynamic buy button: if buyUrl is filled, show active gold link
+    if (fb.buyUrl && fb.buyUrl.trim() !== '' && buyWrap) {
+      buyWrap.innerHTML = `<a href="${fb.buyUrl}" class="btn-gold" target="_blank" rel="noopener">${fb.btnCopyText}</a>`;
+    }
+
+    // ---- Look Inside Lightbox ----
+    const lightbox = document.getElementById('lookInsideLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxBackdrop = document.getElementById('lightboxBackdrop');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lookInsideBtn = document.getElementById('lookInsideBtn');
+    const images = fb.lookInsideImages || [];
+    let currentIndex = 0;
+    let lastFocusBeforeLightbox = null;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function updateSlide(idx) {
+      currentIndex = idx;
+      if (lightboxImg) {
+        lightboxImg.src = images[currentIndex];
+        lightboxImg.alt = `Whispers from Jannah preview page ${currentIndex + 1}`;
+      }
+      if (lightboxCounter) {
+        lightboxCounter.textContent = `Page ${currentIndex + 1} of ${images.length}`;
+      }
+    }
+
+    function openLightbox() {
+      if (!lightbox || images.length === 0) return;
+      lastFocusBeforeLightbox = document.activeElement;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      updateSlide(0);
+
+      // Focus the close button after opening
+      setTimeout(() => {
+        if (lightboxClose) lightboxClose.focus();
+      }, 100);
+
+      document.addEventListener('keydown', handleLightboxKeydown);
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleLightboxKeydown);
+      if (lastFocusBeforeLightbox) {
+        lastFocusBeforeLightbox.focus();
+      }
+    }
+
+    function goNext() {
+      updateSlide((currentIndex + 1) % images.length);
+    }
+
+    function goPrev() {
+      updateSlide((currentIndex - 1 + images.length) % images.length);
+    }
+
+    function handleLightboxKeydown(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        return;
+      }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        goNext();
+        return;
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        goPrev();
+        return;
+      }
+      // Focus trap: Tab cycles through lightbox controls only
+      if (e.key === 'Tab') {
+        const focusable = lightbox.querySelectorAll('button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    }
+
+    if (lookInsideBtn) {
+      lookInsideBtn.addEventListener('click', openLightbox);
+    }
+    if (lightboxClose) {
+      lightboxClose.addEventListener('click', closeLightbox);
+    }
+    if (lightboxBackdrop) {
+      lightboxBackdrop.addEventListener('click', closeLightbox);
+    }
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener('click', goPrev);
+    }
+    if (lightboxNext) {
+      lightboxNext.addEventListener('click', goNext);
+    }
+
+    // Swipe support
+    if (lightbox) {
+      lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) goNext();
+          else goPrev();
+        }
+      }, { passive: true });
+    }
+  }
+
+  
+
+  // ==========================================================================
+  // 8d. NEWSLETTER FORM (Story Circle Signup with MailerLite / Demo Integration)
   // ==========================================================================
   function initNewsletterForm() {
     const form = document.getElementById('newsletterForm');
     const emailInput = document.getElementById('newsletterEmail');
+    const submitBtn = document.getElementById('newsletterSubmitBtn') || (form ? form.querySelector('button[type="submit"]') : null);
+    const consentCheckbox = document.getElementById('newsletterConsent');
     const hpInput = document.getElementById('newsletterHp');
     const successMsg = document.getElementById('newsletterSuccess');
     const errorMsg = document.getElementById('newsletterError');
     if (!form || !emailInput) return;
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       // Check honeypot field (anti-spam)
@@ -798,22 +1114,237 @@
         return;
       }
 
+      // Hide previous messages
+      if (successMsg) successMsg.hidden = true;
+      if (errorMsg) {
+        errorMsg.hidden = true;
+        errorMsg.textContent = '';
+      }
+
       const emailVal = emailInput.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!emailVal || !emailRegex.test(emailVal)) {
-        if (errorMsg) errorMsg.hidden = false;
-        if (successMsg) successMsg.hidden = true;
+        if (errorMsg) {
+          errorMsg.textContent = 'Please enter a valid email address.';
+          errorMsg.hidden = false;
+        }
         emailInput.setAttribute('aria-invalid', 'true');
         emailInput.focus();
         return;
       }
 
-      // Valid placeholder submission
+      if (consentCheckbox && !consentCheckbox.checked) {
+        if (errorMsg) {
+          errorMsg.textContent = 'Please check the box to agree to receive emails.';
+          errorMsg.hidden = false;
+        }
+        consentCheckbox.focus();
+        return;
+      }
+
       emailInput.setAttribute('aria-invalid', 'false');
+
+      // Disable the button while sending
+      const originalBtnText = submitBtn ? submitBtn.textContent : 'Subscribe';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
+
+      const endpoint = NEWSLETTER_CONFIG && NEWSLETTER_CONFIG.endpoint ? NEWSLETTER_CONFIG.endpoint.trim() : '';
+
+      try {
+        if (!endpoint) {
+          // Demo mode: simulate natural sending delay and display confirmation message
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          if (successMsg) {
+            successMsg.textContent = 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.';
+            successMsg.hidden = false;
+          }
+          form.reset();
+        } else {
+          // Live mode: send to MailerLite endpoint via fetch
+          const formData = new FormData(form);
+          const response = await fetch(endpoint, {
+            method: (NEWSLETTER_CONFIG && NEWSLETTER_CONFIG.method) || 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            if (successMsg) {
+              successMsg.textContent = 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.';
+              successMsg.hidden = false;
+            }
+            form.reset();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        }
+      } catch (err) {
+        if (errorMsg) {
+          errorMsg.textContent = 'Something went wrong while connecting. Please try again in a few moments.';
+          errorMsg.hidden = false;
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 8e. CONTACT FORM (Let's Connect with Form Service / Mailto Demo Fallback)
+  // ==========================================================================
+  function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const nameInput = document.getElementById('contactName');
+    const emailInput = document.getElementById('contactEmail');
+    const reasonSelect = document.getElementById('contactReason');
+    const messageInput = document.getElementById('contactMessage');
+    const consentCheckbox = document.getElementById('contactConsent');
+    const hpInput = document.getElementById('contactHp');
+    const submitBtn = document.getElementById('contactSubmitBtn');
+    const successMsg = document.getElementById('contactSuccess');
+    const errorMsg = document.getElementById('contactError');
+    const mailtoWrap = document.getElementById('contactMailtoFallback');
+    const mailtoLink = document.getElementById('contactMailtoLink');
+
+    const nameErr = document.getElementById('contactNameError');
+    const emailErr = document.getElementById('contactEmailError');
+    const reasonErr = document.getElementById('contactReasonError');
+    const messageErr = document.getElementById('contactMessageError');
+    const consentErr = document.getElementById('contactConsentError');
+
+    function clearErrors() {
+      if (nameErr) nameErr.hidden = true;
+      if (emailErr) emailErr.hidden = true;
+      if (reasonErr) reasonErr.hidden = true;
+      if (messageErr) messageErr.hidden = true;
+      if (consentErr) consentErr.hidden = true;
+      if (successMsg) successMsg.hidden = true;
       if (errorMsg) errorMsg.hidden = true;
-      if (successMsg) successMsg.hidden = false;
-      emailInput.value = '';
+      if (mailtoWrap) mailtoWrap.hidden = true;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Check honeypot
+      if (hpInput && hpInput.value.trim() !== '') {
+        return;
+      }
+
+      clearErrors();
+
+      let hasError = false;
+
+      const nameVal = nameInput ? nameInput.value.trim() : '';
+      const emailVal = emailInput ? emailInput.value.trim() : '';
+      const reasonVal = reasonSelect ? reasonSelect.value : '';
+      const messageVal = messageInput ? messageInput.value.trim() : '';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!nameVal) {
+        if (nameErr) nameErr.hidden = false;
+        if (!hasError && nameInput) nameInput.focus();
+        hasError = true;
+      }
+
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        if (emailErr) emailErr.hidden = false;
+        if (!hasError && emailInput) emailInput.focus();
+        hasError = true;
+      }
+
+      if (!reasonVal) {
+        if (reasonErr) reasonErr.hidden = false;
+        if (!hasError && reasonSelect) reasonSelect.focus();
+        hasError = true;
+      }
+
+      if (!messageVal) {
+        if (messageErr) messageErr.hidden = false;
+        if (!hasError && messageInput) messageInput.focus();
+        hasError = true;
+      }
+
+      if (consentCheckbox && !consentCheckbox.checked) {
+        if (consentErr) consentErr.hidden = false;
+        if (!hasError) consentCheckbox.focus();
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      const originalBtnText = submitBtn ? submitBtn.textContent : 'Send message';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
+
+      const endpoint = CONTACT_CONFIG && CONTACT_CONFIG.endpoint ? CONTACT_CONFIG.endpoint.trim() : '';
+
+      try {
+        if (!endpoint) {
+          // Demo mode: simulate natural sending delay and display success + mailto fallback button
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          if (successMsg) {
+            successMsg.textContent = "Thank you, your message is on its way. I'll reply as soon as I can.";
+            successMsg.hidden = false;
+          }
+
+          // Build prefilled mailto link
+          const subject = encodeURIComponent(`Message from ${nameVal} [${reasonVal}]`);
+          const bodyText = encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\nContacting as: ${reasonVal}\n\nMessage:\n${messageVal}`);
+          const mailtoUrl = `mailto:hello@underthetubatree.com?subject=${subject}&body=${bodyText}`;
+
+          if (mailtoLink) {
+            mailtoLink.href = mailtoUrl;
+          }
+          if (mailtoWrap) {
+            mailtoWrap.hidden = false;
+          }
+
+          form.reset();
+        } else {
+          // Live mode: send via fetch to configured endpoint
+          const formData = new FormData(form);
+          const response = await fetch(endpoint, {
+            method: (CONTACT_CONFIG && CONTACT_CONFIG.method) || 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            if (successMsg) {
+              successMsg.textContent = "Thank you, your message is on its way. I'll reply as soon as I can.";
+              successMsg.hidden = false;
+            }
+            form.reset();
+          } else {
+            throw new Error('Form service submission failed');
+          }
+        }
+      } catch (err) {
+        if (errorMsg) {
+          errorMsg.hidden = false;
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      }
     });
   }
 
@@ -832,50 +1363,55 @@
     document.body.classList.add('intro-running');
 
     // Reset overlay elements
-    if (heroTagline)   heroTagline.classList.remove('in');
-    if (heroHeadline)  heroHeadline.classList.remove('in');
-    if (heroSignature) heroSignature.classList.remove('in');
+    if (heroHeadline)    heroHeadline.classList.remove('in');
+    if (heroBrand)       heroBrand.classList.remove('in');
+    if (heroTagline)     heroTagline.classList.remove('in');
+    if (heroIntro)       heroIntro.classList.remove('in');
     if (readerCharacter) readerCharacter.classList.remove('in');
-    if (heroAction)    heroAction.classList.remove('in');
-    leafGenerationRamp = 0;
+    if (heroAction)      heroAction.classList.remove('in');
+    leafGenerationRamp = 0; // Starts at 0 until startDelay (0.4s)
 
-    // Background slides to final scale (from 1.03 to 1) — ALWAYS visible
+    // Background slides to final scale (from 1.03 to 1), ALWAYS visible
     introTimers.push(setTimeout(() => {
-      document.body.classList.add('intro-ready');
+      document.body.classList.add('intro-bg-settle');
     }, 120));
 
-    // 2.0s: Leaves start gradually
+    // 0.4s (startDelay): Leaves active with full opacity, no slow ramp
     introTimers.push(setTimeout(() => {
-      const startTime = performance.now();
-      const rampInterval = setInterval(() => {
-        const elapsed = (performance.now() - startTime) / 1600;
-        leafGenerationRamp = Math.min(1, elapsed);
-        if (leafGenerationRamp >= 1) clearInterval(rampInterval);
-      }, 50);
-    }, CONFIG.stage.leavesStartMs));
+      leafGenerationRamp = 1;
+    }, LEAVES_CONFIG.startDelay || 400));
 
-    // 3.2s: Tagline
+    // 1.2s: H1 headline
     introTimers.push(setTimeout(() => {
-      if (heroTagline) heroTagline.classList.add('in');
-    }, CONFIG.stage.taglineMs));
+      if (heroHeadline) heroHeadline.classList.add('in');
+    }, CONFIG.stage.headlineMs));
 
-    // 3.8s: Reader character
+    // 2.0s: Brand name in script
+    introTimers.push(setTimeout(() => {
+      if (heroBrand) heroBrand.classList.add('in');
+    }, CONFIG.stage.brandMs));
+
+    // 2.4s: Reader character
     introTimers.push(setTimeout(() => {
       if (readerCharacter) readerCharacter.classList.add('in');
     }, CONFIG.stage.readerMs));
 
-    // 4.2s: Main headline + script signature
+    // 2.6s: Tagline in italic serif
     introTimers.push(setTimeout(() => {
-      if (heroHeadline) heroHeadline.classList.add('in');
-      if (heroSignature) heroSignature.classList.add('in');
-    }, CONFIG.stage.headlineMs));
+      if (heroTagline) heroTagline.classList.add('in');
+    }, CONFIG.stage.taglineMs));
 
-    // 5.5s: Button
+    // 3.2s: Intro paragraph
+    introTimers.push(setTimeout(() => {
+      if (heroIntro) heroIntro.classList.add('in');
+    }, CONFIG.stage.introParaMs));
+
+    // 3.8s: Action buttons
     introTimers.push(setTimeout(() => {
       if (heroAction) heroAction.classList.add('in');
     }, CONFIG.stage.buttonMs));
 
-    // 6.2s: Done
+    // 4.4s: Done
     introTimers.push(setTimeout(() => {
       document.body.classList.remove('intro-running');
       sessionStorage.setItem(CONFIG.storageKeyIntro, 'true');
@@ -888,9 +1424,10 @@
     document.body.classList.add('skip-intro-active', 'intro-ready');
     leafGenerationRamp = 1;
 
-    if (heroTagline)     heroTagline.classList.add('in');
     if (heroHeadline)    heroHeadline.classList.add('in');
-    if (heroSignature)   heroSignature.classList.add('in');
+    if (heroBrand)       heroBrand.classList.add('in');
+    if (heroTagline)     heroTagline.classList.add('in');
+    if (heroIntro)       heroIntro.classList.add('in');
     if (readerCharacter) readerCharacter.classList.add('in');
     if (heroAction)      heroAction.classList.add('in');
 
@@ -919,7 +1456,7 @@
   }
 
   // ==========================================================================
-  // 11. MOBILE DRAWER — Full-height panel from right with focus trap
+  // 11. MOBILE DRAWER ,  Full-height panel from right with focus trap
   // ==========================================================================
   let lastFocusedElement = null;
 
@@ -1029,7 +1566,7 @@
   }
 
   // ==========================================================================
-  // 11b. STICKY HEADER — Shadow on scroll
+  // 11b. STICKY HEADER ,  Shadow on scroll
   // ==========================================================================
   function initScrollShadow() {
     if (!mainNav) return;
@@ -1083,17 +1620,30 @@
 
   // ==========================================================================
   // 12b. SCROLL REVEAL (IntersectionObserver with 12px fade-up)
+  // Ensures elements in or approaching view are immediately visible with zero blank gap
   // ==========================================================================
   function initScrollReveal() {
-    if (prefersReducedMotion) {
+    const revealVisibleElements = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      document.querySelectorAll('.reveal-on-scroll:not(.is-revealed)').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        // Immediately reveal if within or near viewport (buffer of 120px)
+        if (rect.top <= vh + 120 && rect.bottom >= -60) {
+          el.classList.add('is-revealed');
+        }
+      });
+    };
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
       document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('is-revealed'));
       return;
     }
 
-    if (!('IntersectionObserver' in window)) {
-      document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('is-revealed'));
-      return;
-    }
+    // Immediate check on load & animation frames to ensure no blank gaps
+    revealVisibleElements();
+    requestAnimationFrame(revealVisibleElements);
+    setTimeout(revealVisibleElements, 100);
+    setTimeout(revealVisibleElements, 350);
 
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -1104,11 +1654,18 @@
       });
     }, {
       root: null,
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.01,
+      rootMargin: '120px 0px 80px 0px'
     });
 
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+      if (!el.classList.contains('is-revealed')) {
+        observer.observe(el);
+      }
+    });
+
+    window.addEventListener('scroll', revealVisibleElements, { passive: true });
+    window.addEventListener('resize', revealVisibleElements, { passive: true });
   }
 
   // ==========================================================================
@@ -1194,6 +1751,87 @@
   }
 
   // ==========================================================================
+  // 12d. ACTIVE NAV SCROLL OBSERVER (IntersectionObserver with gold underline)
+  // ==========================================================================
+  function initActiveNavScrollObserver() {
+    if (document.body.classList.contains('page-author')) {
+      const desktopLinks = document.querySelectorAll('.nav-link');
+      const drawerLinks = document.querySelectorAll('.mobile-drawer__link');
+      desktopLinks.forEach(l => l.classList.remove('active'));
+      drawerLinks.forEach(l => l.classList.remove('active'));
+      const desktopAuthor = document.querySelector('.nav-link[href="author.html"], .nav-link[href$="author.html"]');
+      const drawerAuthor = document.querySelector('.mobile-drawer__link[href="author.html"], .mobile-drawer__link[href$="author.html"]');
+      if (desktopAuthor) desktopAuthor.classList.add('active');
+      if (drawerAuthor) drawerAuthor.classList.add('active');
+      return;
+    }
+
+    const sectionToNavMap = {
+      'top': 'top',
+      'explore': 'explore',
+      'featured-book': 'explore',
+      'story-garden': 'story-garden',
+      'little-roots': 'story-garden',
+      'author': 'author',
+      'story-circle': 'contact',
+      'contact': 'contact'
+    };
+
+    const navSections = [
+      document.getElementById('top') || document.querySelector('.hero-section'),
+      document.getElementById('explore'),
+      document.getElementById('featured-book'),
+      document.getElementById('story-garden'),
+      document.getElementById('little-roots'),
+      document.getElementById('author'),
+      document.getElementById('story-circle'),
+      document.getElementById('contact')
+    ].filter(Boolean);
+
+    const desktopLinks = document.querySelectorAll('.nav-link');
+    const drawerLinks = document.querySelectorAll('.mobile-drawer__link');
+
+    function setActive(targetId) {
+      const mappedId = sectionToNavMap[targetId] || targetId;
+      desktopLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === `#${mappedId}` || (mappedId === 'top' && (href === '#top' || href === '#'))) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+      drawerLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === `#${mappedId}` || (mappedId === 'top' && (href === '#top' || href === '#'))) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setActive('top');
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id || 'top';
+          setActive(id);
+        }
+      });
+    }, {
+      rootMargin: '-20% 0px -55% 0px',
+      threshold: 0
+    });
+
+    navSections.forEach(sec => observer.observe(sec));
+  }
+
+  // ==========================================================================
   // 13. EVENT LISTENERS & LIFECYCLE
   // ==========================================================================
   document.addEventListener('visibilitychange', () => {
@@ -1204,11 +1842,26 @@
     resizeCanvas();
     applyReaderPosition();
     const isMobile = window.innerWidth <= 768;
-    const targetCount = isMobile ? CONFIG.leafCounts.mobile : CONFIG.leafCounts.desktop;
+    const targetCount = isMobile ? LEAVES_CONFIG.leafCountMobile : LEAVES_CONFIG.leafCountDesktop;
     if (leaves.length !== targetCount) {
       initLeaves();
     }
   });
+
+  // ==========================================================================
+  // 13B. FOOTER INITIALIZATION
+  // ==========================================================================
+  function initFooter() {
+    const fbLink = document.getElementById('footerFacebookLink');
+    if (fbLink) {
+      if (SITE_CONTENT.social && SITE_CONTENT.social.facebook && SITE_CONTENT.social.facebook.trim() !== '') {
+        fbLink.href = SITE_CONTENT.social.facebook;
+        fbLink.style.display = 'inline-flex';
+      } else {
+        fbLink.style.display = 'none';
+      }
+    }
+  }
 
   // ==========================================================================
   // 14. INITIALIZATION
@@ -1238,15 +1891,17 @@
     initParallax();
     initSmoothScroll();
     applyReaderPosition();
-    renderStoryGardenUpcoming();
-    initNotifyModal();
+    initStoryGardenCards();
     renderExploreCards();
-    renderReadersCorner();
+    initFeaturedBook();
+    initActiveNavScrollObserver();
     initNewsletterForm();
+    initContactForm();
+    initFooter();
     initScrollReveal();
     initMarginDriftingLeaves();
 
-    // Hero intro — background is ALWAYS visible, never fades from opacity 0
+    // Hero intro ,  background is ALWAYS visible, never fades from opacity 0
     onHeroBgReady(() => {
       const hasPlayed = sessionStorage.getItem(CONFIG.storageKeyIntro) === 'true';
 
