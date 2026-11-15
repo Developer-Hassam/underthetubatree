@@ -1914,7 +1914,7 @@ body.skip-intro-active .hero-action {
   font-size: 16px;
   line-height: 1.6;
   color: #4A3A46;
-  margin: 12px 0 0 0;
+  margin: 12px 0 24px 0; /* Minimum 24px space between card text and button */
 }
 
 /* Button: gold pill background #C9A25A, text #3A2A1F, 52px tall, padding 0 26px, font 15px semi-bold */
@@ -2255,52 +2255,26 @@ body.skip-intro-active .hero-action {
   font-size: 2.25rem;
   color: var(--color-deep-plum);
   line-height: 1.2;
-  margin: 0.35rem 0 1.75rem;
-}
-
-/* Short biography Card */
-.about-bio-card {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(196, 154, 88, 0.35);
-  border-radius: 16px;
-  padding: 1.4rem 1.65rem;
-  box-shadow: 0 4px 20px rgba(84, 45, 69, 0.04);
-  margin-bottom: 1.75rem;
-}
-
-.about-bio-card__title {
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #8A6A2F;
-  margin: 0 0 0.75rem 0;
-}
-
-.about-bio-card__text {
-  font-family: var(--font-sans);
-  font-size: 0.94rem;
-  line-height: 1.7;
-  color: var(--color-text-dark);
-  margin: 0;
+  margin: 0.35rem 0 0;
 }
 
 .about-author__action {
   display: flex;
   align-items: center;
+  margin-top: 28px; /* Button sits 28px below the signature */
 }
 
 /* Dedicated Author Page Styles */
 .author-page-main {
-  background-color: #F8F9F3;
-  padding: 4.5rem 2rem 5.5rem;
+  background-color: #FFF9F2;
+  padding: 56px 20px 80px;
+  min-height: 70vh;
 }
 
 .author-page-hero {
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 3.5rem;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
 }
 
 .author-page-badge {
@@ -2318,16 +2292,120 @@ body.skip-intro-active .hero-action {
 
 .author-page-heading {
   font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 600;
-  color: var(--color-deep-plum);
+  color: #542D45;
   line-height: 1.2;
   margin: 0 0 0.5rem 0;
 }
 
+.author-page-heading .leaf-ornament {
+  margin: 10px auto 14px;
+}
+
+.author-profile-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.author-profile-photo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.25rem;
+}
+
+.author-profile-photo-wrap .about-author__frame {
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.author-bio-content {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.75;
+  color: #3F3340;
+  margin-bottom: 2rem;
+}
+
+.author-bio-content p {
+  margin: 0 0 1.25rem 0;
+}
+
+.author-social-wrap {
+  margin: 1.75rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.author-instagram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: #542D45;
+  text-decoration: underline;
+  text-decoration-color: #C9A25A;
+  text-underline-offset: 2px;
+  min-height: 44px;
+  padding: 6px 0;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.author-instagram-link svg {
+  color: #C9A25A;
+  flex-shrink: 0;
+}
+
+.author-instagram-link:hover {
+  color: #C9A25A;
+  text-decoration-color: #542D45;
+}
+
+.author-instagram-link:focus-visible {
+  outline: 2px solid #542D45;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.author-page-nav-back {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  margin-bottom: 3.5rem;
+}
+
+.author-back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 26px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: #542D45;
+  border: 1.5px solid #C9A25A;
+  background: transparent;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.author-back-link:hover {
+  background: #C9A25A;
+  color: #3A2A1F;
+}
+
+.author-back-link:focus-visible {
+  outline: 2px solid #542D45;
+  outline-offset: 3px;
+}
+
 /* Dedicated Page Placeholders */
 .author-details-placeholders {
-  max-width: 1200px;
+  max-width: 700px;
   margin: 3.5rem auto 0;
 }
 
@@ -2364,10 +2442,27 @@ body.skip-intro-active .hero-action {
   margin: 0;
 }
 
-.author-page-nav-back {
-  display: flex;
-  justify-content: center;
-  margin-top: 2.5rem;
+@media (max-width: 600px) {
+  .author-page-main {
+    padding: 40px 20px 60px;
+  }
+  .author-page-hero {
+    margin-bottom: 2rem;
+  }
+  .author-bio-content {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .author-social-wrap {
+    justify-content: center;
+  }
+  .author-page-nav-back {
+    justify-content: center;
+  }
+  .author-back-link {
+    width: 100%;
+    max-width: 320px;
+  }
 }
 
 /* ==========================================================================
@@ -4251,11 +4346,6 @@ body.skip-intro-active .hero-action {
 
   .about-author__signature {
     text-align: center;
-  }
-
-  .about-bio-card {
-    text-align: left;
-    padding: 1.25rem 1.25rem;
   }
 
   .about-author__action {

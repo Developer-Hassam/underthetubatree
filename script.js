@@ -188,12 +188,12 @@
       paragraph2: 'Little Roots is a growing collection celebrating the beauty of Pakistani childhood through stories filled with culture, family, imagination and faith.',
       exploreTitle: 'The collection may explore:',
       exploreItems: [
-        'Pakistani childhood memories.',
-        'Cousin adventures.',
-        'Family traditions.',
-        'Imaginative jinn tales.',
-        'Cultural celebrations.',
-        'Islamic values woven into everyday stories.'
+        'Pakistani childhood memories',
+        'Cousin adventures',
+        'Family traditions',
+        'Imaginative jinn tales',
+        'Cultural celebrations',
+        'Islamic values woven into everyday stories'
       ],
       badge: 'In Development',
       statusLine: 'In Development',
@@ -213,8 +213,6 @@
       p3: 'From heartfelt stories like Whispers from Jannah to the adventures taking root in Little Roots, I believe every child deserves stories that make them feel seen, connected and inspired.',
       p4: 'Thank you for being part of this growing story.',
       signature: 'With love, Tuba.',
-      bioTitle: 'Short biography',
-      bioText: 'Tuba Seyal is the author behind Under The Tuba Tree, a little world created from a love of stories, meaningful connections, and the magic of childhood. Through her writing, Tuba hopes to create stories that reach beyond the pages, stories that nurture imagination, celebrate cultural roots, explore faith, and offer comfort to little hearts. From heartfelt stories like Whispers from Jannah to the adventures taking root in the Little Roots collection, she believes every child deserves stories that make them feel seen, connected, and inspired. Welcome beneath the tree.',
       btnStoryText: 'Read My Story',
       btnStoryHref: 'author.html'
     },
@@ -729,8 +727,8 @@
       badge: 'Future ideas',
       title: 'More Stories Under the Tree',
       text: 'New adventures, meaningful lessons and imaginative worlds waiting to grow.',
-      buttonLabel: null,
-      href: null
+      buttonLabel: 'Join Our Story Circle',
+      href: '#story-circle'
     }
   ];
 
