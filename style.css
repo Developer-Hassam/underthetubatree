@@ -20,6 +20,16 @@
   --color-border-subtle: rgba(84, 45, 69, 0.10);
   --color-sage-bg:       #EFF3EB;
 
+  /* Hero Mobile Background Tuning (max-width: 899px) */
+  --hero-pos-x-mobile:   95%;
+  --hero-pos-y-mobile:   60%;
+  --hero-height-mobile:  min(88svh, 760px);
+
+  /* Story Garden Card Image Positions */
+  --pos-bloom:  center 40%;
+  --pos-sprout: center 55%;
+  --pos-seed:   center 62%;
+
   /* Hero Text Exact Colors (WCAG AA Compliant over night artwork) */
   --hero-h1-color:       #FFF9F2;
   --hero-brand-color:    #E8D3A1;
@@ -1783,77 +1793,45 @@ body.skip-intro-active .hero-action {
   opacity: 1;
 }
 
-/* Hover (desktop only): card lifts 6px with slightly stronger shadow, 250ms */
+/* Hover (desktop only): card lifts 6px with slightly stronger shadow, image scales to 1.04 */
 @media (hover: hover) and (pointer: fine) {
   .sg-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 24px 50px rgba(8, 10, 40, 0.45);
   }
+
+  .sg-card:hover .sg-card__img {
+    transform: scale(1.04);
+  }
 }
 
-/* Illustration area on top: height 170px (150px on mobile), full width */
+/* Illustration area on top: aspect-ratio 2 / 1 on desktop (150px on mobile), full width */
 .sg-card__visual {
   width: 100%;
-  height: 170px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 2 / 1;
   position: relative;
   overflow: hidden;
+  background: transparent;
 }
 
-/* Tints per card: card 1 gold #F6EBD0, card 2 sage #E6EDE0, card 3 lavender #EEE6F2 */
-.sg-card--bloom .sg-card__visual {
-  background: #F6EBD0;
-}
-
-.sg-card--sprout .sg-card__visual {
-  background: #E6EDE0;
-}
-
-.sg-card--seed .sg-card__visual {
-  background: #EEE6F2;
-}
-
-.sg-card__svg {
-  width: 120px;
-  height: auto;
+.sg-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
+  transition: transform 400ms ease;
 }
 
-/* Idle animations (desktop only) */
-@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
-  /* Card 1 blossom sways 2 degrees (6s) */
-  .sg-svg-sway-bloom {
-    transform-origin: 70px 50px;
-    animation: sgBloomSway 6s ease-in-out infinite alternate;
-  }
-
-  /* Card 2 leaves sway 3 degrees (5s) */
-  .sg-svg-sway-sprout {
-    transform-origin: 70px 75px;
-    animation: sgSproutSway 5s ease-in-out infinite alternate;
-  }
-
-  /* Card 3 sparkles fade in and out (4s) */
-  .sg-svg-sparkles {
-    animation: sgSparkleFade 4s ease-in-out infinite alternate;
-  }
+.sg-card--bloom .sg-card__img {
+  object-position: var(--pos-bloom, center 40%);
 }
 
-@keyframes sgBloomSway {
-  0%   { transform: rotate(-2deg); }
-  100% { transform: rotate(2deg); }
+.sg-card--sprout .sg-card__img {
+  object-position: var(--pos-sprout, center 55%);
 }
 
-@keyframes sgSproutSway {
-  0%   { transform: rotate(-3deg); }
-  100% { transform: rotate(3deg); }
-}
-
-@keyframes sgSparkleFade {
-  0%   { opacity: 0.35; transform: scale(0.92); }
-  100% { opacity: 1; transform: scale(1.08); }
+.sg-card--seed .sg-card__img {
+  object-position: var(--pos-seed, center 62%);
 }
 
 /* Text area: padding 24px 26px 0 */
@@ -1971,7 +1949,8 @@ body.skip-intro-active .hero-action {
   }
 
   .sg-card__visual {
-    height: 160px;
+    height: 150px;
+    aspect-ratio: unset;
   }
 
   .sg-card__title {
@@ -1998,6 +1977,7 @@ body.skip-intro-active .hero-action {
 
   .sg-card__visual {
     height: 150px; /* 150px on mobile */
+    aspect-ratio: unset;
   }
 
   .sg-card__body {
@@ -2022,15 +2002,14 @@ body.skip-intro-active .hero-action {
 
 /* Prefers-reduced-motion: disable all animations & transforms */
 @media (prefers-reduced-motion: reduce) {
-  .sg-svg-sway-bloom,
-  .sg-svg-sway-sprout,
-  .sg-svg-sparkles,
   .sg-drift-leaf {
     animation: none !important;
   }
 
   .sg-card,
   .sg-card:hover,
+  .sg-card:hover .sg-card__img,
+  .sg-card__img,
   .sg-card__btn,
   .sg-card__btn:hover {
     transform: none !important;
@@ -3750,30 +3729,18 @@ body.skip-intro-active .hero-action {
     position: relative !important;
     display: block !important;
     width: 100% !important;
-    height: clamp(560px, calc(100svh - var(--header-total-height, 90px)), 780px) !important;
-    min-height: 540px !important;
+    height: var(--hero-height-mobile, min(88svh, 760px)) !important;
+    min-height: unset !important;
     margin-top: var(--header-total-height, 90px) !important;
     overflow: hidden !important;
     background-color: var(--color-night-navy) !important;
   }
 
-  /* Soft vignette overlay so text has high contrast, while lanterns and reading girl below stay 100% bright */
+  /* Remove dark overlay on mobile so background image behind text is 100% crystal clear */
   .hero-section::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none !important;
-    z-index: 6 !important;
-    display: block !important;
-    background: linear-gradient(
-      180deg,
-      rgba(8, 19, 51, 0.40) 0%,
-      rgba(10, 14, 40, 0.58) 26%,
-      rgba(10, 14, 40, 0.48) 55%,
-      transparent 72%
-    ) !important;
+    display: none !important;
+    content: none !important;
+    background: none !important;
   }
 
   /* Artwork fills the entire hero section */
@@ -3788,26 +3755,58 @@ body.skip-intro-active .hero-action {
     mask-image: none !important;
   }
 
-  /* Inner stage 16:9 anchored right */
+  /* Inner stage fills container on mobile, unifying all layers (bg, reader, glow, fireflies, canvas) */
   .hero-artwork .stage {
     position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
+    inset: 0 !important;
+    width: 100% !important;
     height: 100% !important;
-    aspect-ratio: 16 / 9 !important;
-    width: auto !important;
+    aspect-ratio: unset !important;
     overflow: hidden !important;
     pointer-events: auto !important;
     -webkit-mask-image: none !important;
     mask-image: none !important;
+    will-change: auto !important;
+    transform: none !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 
-  /* Reading girl in bottom-right corner: fully visible, uncropped, uncovered, clearing wave by >= 24px */
+  .stage__picture {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Background image: object-fit cover with exposed mobile position variables; no blur, no zoom */
+  .stage__bg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: var(--hero-pos-x-mobile, 95%) var(--hero-pos-y-mobile, 60%) !important;
+    will-change: auto !important;
+    transform: none !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Prevent intro scale animation from blurring background on mobile */
+  body.intro-bg-settle .stage__bg,
+  body.intro-ready .stage__bg,
+  body.skip-intro-active .stage__bg {
+    transform: none !important;
+  }
+
+  /* Reading girl in bottom-right corner: fully visible, uncropped, uncovered, clearing wave with >= 12px margin */
   .reader-character {
-    right: 1.5% !important;
-    bottom: 60px !important; /* 36px wave height + 24px buffer = 60px clearance */
+    position: absolute !important;
+    right: 14px !important;
+    bottom: 58px !important; /* 36px wave height + 22px buffer = 58px clearance */
     left: auto !important;
-    width: 20% !important;
+    width: clamp(140px, 38vw, 195px) !important;
     z-index: 10 !important;
   }
 
@@ -3823,7 +3822,7 @@ body.skip-intro-active .hero-action {
   /* Hero Content vertically centered above reader.png */
   .hero-content {
     position: absolute !important;
-    top: 42% !important;
+    top: 40% !important;
     left: 0 !important;
     right: 0 !important;
     bottom: auto !important;
@@ -3858,7 +3857,7 @@ body.skip-intro-active .hero-action {
     line-height: 1.1 !important;
     text-wrap: balance !important;
     color: #FFF9F2 !important;
-    text-shadow: 0 2px 14px rgba(10, 14, 40, 0.95), 0 0 24px rgba(10, 14, 40, 0.7) !important;
+    text-shadow: 0 2px 14px rgba(8, 10, 36, 0.9), 0 1px 3px rgba(8, 10, 36, 0.95) !important;
     margin-top: 0 !important;
     margin-bottom: 4px !important;
     margin-left: auto !important;
@@ -3876,7 +3875,7 @@ body.skip-intro-active .hero-action {
     font-size: clamp(1.4rem, 4.8vw, 1.75rem) !important;
     color: #E8D3A1 !important;
     line-height: 1.2 !important;
-    text-shadow: 0 2px 14px rgba(10, 14, 40, 0.95) !important;
+    text-shadow: 0 2px 14px rgba(8, 10, 36, 0.9), 0 1px 3px rgba(8, 10, 36, 0.95) !important;
     margin-top: 0 !important;
     margin-bottom: 6px !important;
     margin-left: auto !important;
@@ -3891,7 +3890,7 @@ body.skip-intro-active .hero-action {
     font-size: clamp(0.95rem, 3.2vw, 1.1rem) !important;
     color: #FFF9F2 !important;
     letter-spacing: 0.015em !important;
-    text-shadow: 0 2px 14px rgba(10, 14, 40, 0.95) !important;
+    text-shadow: 0 2px 14px rgba(8, 10, 36, 0.9), 0 1px 3px rgba(8, 10, 36, 0.95) !important;
     margin-top: 0 !important;
     margin-bottom: 8px !important;
     margin-left: auto !important;
@@ -3910,7 +3909,7 @@ body.skip-intro-active .hero-action {
     margin-right: auto !important;
     color: #F3EAF0 !important;
     text-wrap: pretty !important;
-    text-shadow: 0 2px 12px rgba(10, 14, 40, 0.95), 0 0 20px rgba(10, 14, 40, 0.7) !important;
+    text-shadow: 0 2px 14px rgba(8, 10, 36, 0.9), 0 1px 3px rgba(8, 10, 36, 0.95) !important;
   }
 
   /* Buttons: side by side, centered, wrapping neatly */

@@ -28,12 +28,19 @@
   const { leafCountDesktop, leafCountMobile, fallSpeedMultiplier, startDelay } = LEAVES_CONFIG;
 
   // ==========================================================================
-  // HERO ARTWORK & READER CONFIGURATION
-  // • artworkHeightMobile: clamp(380px, 58svh, 540px)
-  // • reader position: right 1.5%, bottom 3%, left 'auto', width 20%
+  // HERO ARTWORK & MOBILE POSITIONING CONFIGURATION (max-width: 899px)
+  // • posX: horizontal focal point (28% centers main trunk & lantern branch on right half)
+  // • posY: vertical focal point (60%)
+  // • heightMobile: viewport coverage min(88svh, 760px)
   // ==========================================================================
+  const HERO_MOBILE_CONFIG = {
+    posX: '28%',
+    posY: '60%',
+    heightMobile: 'min(88svh, 760px)'
+  };
+
   const HERO_ARTWORK_CONFIG = {
-    heightMobile: 'clamp(380px, 58svh, 540px)'
+    heightMobile: HERO_MOBILE_CONFIG.heightMobile
   };
 
   const READER_CONFIG = {
@@ -44,10 +51,10 @@
       width: 20.0   // Width as % of stage width (20%)
     },
     mobile: {
-      right: 1.5,   // Same stage percentages as desktop: right 1.5%
-      bottom: '60px', // 36px wave + 24px buffer = 60px clearance
-      left: 'auto', // left auto
-      width: 20.0   // width 20%
+      right: '14px',  // At least 12px margin on the right, fully visible, uncropped
+      bottom: '58px', // Clears bottom wave with >= 22px buffer
+      left: 'auto',
+      width: 'clamp(140px, 38vw, 195px)'
     },
     introDelayMs: 3800
   };
@@ -712,7 +719,8 @@
       title: 'Whispers from Jannah',
       text: 'A heartfelt story about love, loss, faith and hope.',
       buttonLabel: 'Learn about the book',
-      href: '#featured-book'
+      href: '#featured-book',
+      alt: 'A blossoming tree glowing with lanterns beneath a crescent moon, our first book'
     },
     {
       stage: 'sprout',
@@ -720,7 +728,8 @@
       title: 'Little Roots: Pakistani Stories Collection',
       text: 'A growing collection celebrating the beauty of Pakistani childhood.',
       buttonLabel: 'Discover Little Roots',
-      href: '#little-roots'
+      href: '#little-roots',
+      alt: 'A young mango sapling in a sunlit Pakistani courtyard, a collection in development'
     },
     {
       stage: 'seed',
@@ -728,88 +737,13 @@
       title: 'More Stories Under the Tree',
       text: 'New adventures, meaningful lessons and imaginative worlds waiting to grow.',
       buttonLabel: 'Join Our Story Circle',
-      href: '#story-circle'
+      href: '#story-circle',
+      alt: 'A golden seed glowing in the soil beneath a twilight sky, future story ideas'
     }
   ];
 
   // Expose configuration globally for fine-tuning without touching markup
   window.gardenItems = gardenItems;
-
-  // Inline painterly SVG illustrations for each growth stage
-  function getStageSvg(stage) {
-    if (stage === 'bloom') {
-      return `
-        <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Soft gold glow circle behind blossom -->
-          <circle cx="70" cy="52" r="44" fill="rgba(201, 162, 90, 0.22)"/>
-          <!-- Short stem with 3 leaves -->
-          <path d="M70 122 C70 98 68 76 70 58" stroke="#4F6B47" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M69 102 C50 98 45 82 50 74 C60 78 68 90 69 102 Z" fill="#7C9A6D"/>
-          <path d="M71 92 C90 88 94 74 90 66 C80 70 72 80 71 92 Z" fill="#7C9A6D"/>
-          <path d="M70 78 C56 72 52 60 58 54 C66 58 70 68 70 78 Z" fill="#4F6B47"/>
-          <!-- Blossom with gentle desktop sway -->
-          <g class="sg-svg-sway-bloom">
-            <!-- 5 Blush Petals -->
-            <path d="M70 50 C60 36 64 24 70 24 C76 24 80 36 70 50 Z" fill="#E8A9B8"/>
-            <path d="M70 50 C84 40 96 44 96 50 C96 56 84 60 70 50 Z" fill="#EFAAB9"/>
-            <path d="M70 50 C80 64 76 76 70 76 C64 76 60 64 70 50 Z" fill="#E8A9B8"/>
-            <path d="M70 50 C56 60 44 56 44 50 C44 44 56 40 70 50 Z" fill="#F4BCC8"/>
-            <path d="M70 50 C54 38 60 28 68 34 C72 38 72 46 70 50 Z" fill="#E29DAE"/>
-            <path d="M70 50 C86 38 80 28 72 34 C68 38 68 46 70 50 Z" fill="#F0B5C2"/>
-            <!-- Antique Gold Centre -->
-            <circle cx="70" cy="50" r="10" fill="#C9A25A"/>
-            <circle cx="70" cy="50" r="7" fill="#DDBB7A"/>
-            <circle cx="68" cy="48" r="2" fill="#FFF9F2" opacity="0.8"/>
-          </g>
-        </svg>
-      `;
-    }
-    if (stage === 'sprout') {
-      return `
-        <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Soil mound -->
-          <ellipse cx="70" cy="116" rx="46" ry="14" fill="#8A5A3C"/>
-          <ellipse cx="70" cy="118" rx="38" ry="10" fill="#73472A"/>
-          <path d="M38 116 Q70 106 102 116" stroke="#5E3820" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <!-- Sprout with gentle desktop sway -->
-          <g class="sg-svg-sway-sprout">
-            <!-- Young stem -->
-            <path d="M70 114 C70 94 69 76 70 62" stroke="#4F6B47" stroke-width="4.5" stroke-linecap="round"/>
-            <!-- 2 Fresh sage leaves -->
-            <path d="M70 82 C50 74 46 54 56 46 C68 52 70 70 70 82 Z" fill="#7C9A6D"/>
-            <path d="M60 62 C65 67 68 74 70 80" stroke="#5B7E4C" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <path d="M70 74 C90 66 94 46 84 38 C72 44 70 62 70 74 Z" fill="#4F6B47"/>
-            <path d="M80 54 C75 59 72 66 70 72" stroke="#3D5537" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <!-- Tiny tender bud top -->
-            <circle cx="70" cy="60" r="3" fill="#C9A25A"/>
-          </g>
-        </svg>
-      `;
-    }
-    // stage === 'seed'
-    return `
-      <svg class="sg-card__svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- 3 Tiny sparkle dots above seed (animated fade on desktop) -->
-        <g class="sg-svg-sparkles">
-          <!-- Sparkle 1 (centre top) -->
-          <polygon points="70,44 72,51 79,53 72,55 70,62 68,55 61,53 68,51" fill="#C9A25A"/>
-          <!-- Sparkle 2 (left) -->
-          <polygon points="48,58 49.5,62 54,63 49.5,64 48,68 46.5,64 42,63 46.5,62" fill="#E8D3A1"/>
-          <!-- Sparkle 3 (right) -->
-          <polygon points="92,62 93.5,66 98,67 93.5,68 92,72 90.5,68 86,67 90.5,66" fill="#E8D3A1"/>
-        </g>
-        <!-- Soil mound -->
-        <ellipse cx="70" cy="116" rx="44" ry="14" fill="#8A5A3C"/>
-        <ellipse cx="70" cy="118" rx="36" ry="10" fill="#73472A"/>
-        <path d="M40 116 Q70 108 100 116" stroke="#5E3820" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <!-- Single plump seed resting on top -->
-        <path d="M70 86 C80 86 85 98 85 106 C85 114 78 118 70 118 C62 118 55 114 55 106 C55 98 60 86 70 86 Z" fill="#C9A25A" stroke="#B38637" stroke-width="2"/>
-        <!-- Soft highlight on seed -->
-        <path d="M66 93 C62 98 61 105 63 110" stroke="#FFF9F2" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.75"/>
-        <circle cx="76" cy="100" r="1.5" fill="#DDBB7A"/>
-      </svg>
-    `;
-  }
 
   function initStoryGardenCards() {
     const grid = document.getElementById('sgCardsGrid');
@@ -849,7 +783,15 @@
       return `
         <article class="sg-card sg-card--${item.stage}" aria-label="${item.title}">
           <div class="sg-card__visual">
-            ${getStageSvg(item.stage)}
+            <img class="sg-card__img"
+                 srcset="assets/garden-${item.stage}-900.webp 900w, assets/garden-${item.stage}-1400.webp 1400w"
+                 sizes="(min-width: 900px) 360px, calc(100vw - 40px)"
+                 src="assets/garden-${item.stage}-900.webp"
+                 width="1774"
+                 height="887"
+                 loading="lazy"
+                 decoding="async"
+                 alt="${item.alt}">
           </div>
           <div class="sg-card__body">
             <div class="sg-card__badge-wrap">
@@ -1883,6 +1825,18 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    // Seamless fallback for mobile portrait source until client supplies the file
+    const mobilePortraitSource = document.querySelector('source[srcset*="hero-bg-mobile.jpg"]');
+    if (mobilePortraitSource) {
+      const probe = new Image();
+      probe.src = 'assets/hero-bg-mobile.jpg';
+      probe.onerror = () => {
+        if (mobilePortraitSource && mobilePortraitSource.parentNode) {
+          mobilePortraitSource.remove();
+        }
+      };
+    }
+
     initMobileDrawer();
     initScrollShadow();
     initFireflies();

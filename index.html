@@ -13,12 +13,12 @@
 
   <!-- Preload Fonts & Critical Hero Assets -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap">
-  <link rel="preload" as="image" href="assets/hero-bg.jpg?v=2" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/hero-bg.jpg" imagesrcset="assets/hero-bg-828.jpg 828w, assets/hero-bg-1242.jpg 1242w, assets/hero-bg-1656.jpg 1656w" imagesizes="100vw" fetchpriority="high">
   <link rel="preload" as="image" href="assets/reader.png?v=2">
   <link rel="preload" as="image" href="assets/logo-mark.png?v=4">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=34">
+  <link rel="stylesheet" href="style.css?v=36">
 </head>
 <body>
 
@@ -89,13 +89,18 @@
       <!-- Stage: 16:9 artwork container, anchored right -->
       <div class="stage" id="stage">
 
-        <!-- Background Scene -->
+        <!-- Background Scene with High-Res Srcset -->
         <picture class="stage__picture">
-          <source media="(max-width: 600px)" srcset="assets/hero-bg.jpg?v=2">
-          <img src="assets/hero-bg.jpg?v=2"
+          <source media="(max-width: 899px)"
+                  srcset="assets/hero-bg-828.jpg 828w, assets/hero-bg-1242.jpg 1242w, assets/hero-bg-1656.jpg 1656w"
+                  sizes="100vw">
+          <img src="assets/hero-bg.jpg"
+               srcset="assets/hero-bg-828.jpg 828w, assets/hero-bg-1242.jpg 1242w, assets/hero-bg-1656.jpg 1656w"
+               sizes="(max-width: 899px) 100vw, 100vw"
+               width="1672" height="941"
                alt="Moonlit night scene with blooming tree, glowing lanterns, crescent moon and distant palace"
                class="stage__bg" id="heroBg"
-               fetchpriority="high" decoding="sync">
+               fetchpriority="high" decoding="async">
         </picture>
 
         <!-- Decorative Reader Character Layer -->
