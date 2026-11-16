@@ -224,34 +224,7 @@
     </div>
   </footer>
 
-  <!-- Light navigation and mobile drawer script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuToggle = document.getElementById('menuToggle');
-      const mobileDrawer = document.getElementById('mobileDrawer');
-      const drawerClose = document.getElementById('drawerClose');
-      const drawerBackdrop = document.getElementById('drawerBackdrop');
-
-      function openDrawer() {
-        if (!mobileDrawer) return;
-        mobileDrawer.hidden = false;
-        mobileDrawer.classList.add('is-open');
-        menuToggle?.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeDrawer() {
-        if (!mobileDrawer) return;
-        mobileDrawer.hidden = true;
-        mobileDrawer.classList.remove('is-open');
-        menuToggle?.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-
-      menuToggle?.addEventListener('click', openDrawer);
-      drawerClose?.addEventListener('click', closeDrawer);
-      drawerBackdrop?.addEventListener('click', closeDrawer);
-    });
-  </script>
+  <!-- Shared site script -->
+  <script src="script.js?v=37" defer></script>
 </body>
 </html>

@@ -240,7 +240,7 @@
       btnStoryHref: 'author.html'
     },
     storyCircle: {
-      heading: 'Join Our Story Circle',
+      heading: 'Get notified.',
       subtitle: "Let's grow a little garden of stories together.",
       paragraph: 'Be the first to hear about new books, upcoming collections, behind-the-scenes moments and little announcements from beneath our tree.',
       buttonText: 'Subscribe',
@@ -752,7 +752,7 @@
       badge: 'Future ideas',
       title: 'More Stories Under the Tree',
       text: 'New adventures, meaningful lessons and imaginative worlds waiting to grow.',
-      buttonLabel: 'Join Our Story Circle',
+      buttonLabel: 'Get notified',
       href: '#story-circle',
       alt: 'A golden seed glowing in the soil beneath a twilight sky, future story ideas'
     }
@@ -1317,6 +1317,7 @@
   }
 
   function runIntroSequence() {
+    if (!stage && !heroBg) return;
     clearAllIntroTimers();
     document.body.classList.remove('intro-ready', 'skip-intro-active');
     document.body.classList.add('intro-running');
@@ -1378,6 +1379,7 @@
   }
 
   function skipToFinalState() {
+    if (!stage && !heroBg) return;
     clearAllIntroTimers();
     document.body.classList.remove('intro-running');
     document.body.classList.add('skip-intro-active', 'intro-ready');
@@ -1420,20 +1422,25 @@
   let lastFocusedElement = null;
 
   function openDrawer() {
-    if (!mobileDrawer) return;
+    const drawer = document.getElementById('mobileDrawer');
+    const toggle = document.getElementById('menuToggle');
+    const closeBtn = document.getElementById('drawerClose');
+    if (!drawer) return;
     lastFocusedElement = document.activeElement;
 
-    mobileDrawer.hidden = false;
+    drawer.hidden = false;
     // Force reflow before adding open class for transition
-    void mobileDrawer.offsetHeight;
-    mobileDrawer.classList.add('open');
+    void drawer.offsetHeight;
+    drawer.classList.add('open');
     document.body.classList.add('drawer-open');
-    menuToggle.classList.add('active');
-    menuToggle.setAttribute('aria-expanded', 'true');
+    if (toggle) {
+      toggle.classList.add('active');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
 
     // Focus the close button
     setTimeout(() => {
-      if (drawerClose) drawerClose.focus();
+      if (closeBtn) closeBtn.focus();
     }, 100);
 
     // Listeners
@@ -1441,21 +1448,31 @@
   }
 
   function closeDrawer() {
-    if (!mobileDrawer) return;
-    mobileDrawer.classList.remove('open');
+    const drawer = document.getElementById('mobileDrawer');
+    const toggle = document.getElementById('menuToggle');
+    if (!drawer) return;
+    drawer.classList.remove('open');
     document.body.classList.remove('drawer-open');
-    menuToggle.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    document.body.style.position = '';
+    document.documentElement.style.position = '';
+    if (toggle) {
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
 
     // After transition ends, hide
     setTimeout(() => {
-      mobileDrawer.hidden = true;
+      if (!drawer.classList.contains('open')) {
+        drawer.hidden = true;
+      }
     }, 350);
 
     document.removeEventListener('keydown', handleDrawerKeydown);
 
     // Return focus
-    if (lastFocusedElement) {
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
       lastFocusedElement.focus();
       lastFocusedElement = null;
     }
@@ -1469,8 +1486,10 @@
     }
 
     // Focus trap
-    if (e.key === 'Tab' && drawerPanel) {
-      const focusable = drawerPanel.querySelectorAll(
+    const drawer = document.getElementById('mobileDrawer');
+    const panel = document.getElementById('drawerPanel');
+    if (e.key === 'Tab' && panel && drawer && drawer.classList.contains('open')) {
+      const focusable = panel.querySelectorAll(
         'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
       );
       if (focusable.length === 0) return;
@@ -1493,10 +1512,16 @@
   }
 
   function initMobileDrawer() {
-    if (!menuToggle || !mobileDrawer) return;
+    const toggle = document.getElementById('menuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const closeBtn = document.getElementById('drawerClose');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const panel = document.getElementById('drawerPanel');
+    if (!toggle || !drawer) return;
 
-    menuToggle.addEventListener('click', () => {
-      const isOpen = mobileDrawer.classList.contains('open');
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = drawer.classList.contains('open');
       if (isOpen) {
         closeDrawer();
       } else {
@@ -1505,28 +1530,66 @@
     });
 
     // Close button
-    if (drawerClose) {
-      drawerClose.addEventListener('click', closeDrawer);
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeDrawer();
+      });
     }
 
     // Backdrop click to close
-    if (drawerBackdrop) {
-      drawerBackdrop.addEventListener('click', closeDrawer);
+    if (backdrop) {
+      backdrop.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeDrawer();
+      });
     }
 
     // Close on link click
-    if (drawerPanel) {
-      drawerPanel.querySelectorAll('.mobile-drawer__link, .mobile-drawer__cta').forEach(link => {
-        link.addEventListener('click', () => {
-          closeDrawer();
-        });
+    drawer.querySelectorAll('.mobile-drawer__link, .mobile-drawer__cta').forEach(link => {
+      link.addEventListener('click', () => {
+        closeDrawer();
       });
-    }
+    });
+
+    // Close on click outside the panel
+    document.addEventListener('click', (e) => {
+      if (drawer.classList.contains('open')) {
+        if (panel && !panel.contains(e.target) && !toggle.contains(e.target)) {
+          closeDrawer();
+        }
+      }
+    });
+
+    // Close on window resize above 899px
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 900 && drawer.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
   }
 
   // ==========================================================================
-  // 11b. STICKY HEADER ,  Shadow on scroll
+  // 11b. DYNAMIC HEADER HEIGHT & STICKY SHADOW
   // ==========================================================================
+  function updateHeaderHeight() {
+    const topBar = document.getElementById('topBar');
+    const nav = document.getElementById('mainNav');
+    const tbH = topBar ? topBar.offsetHeight : 0;
+    const navH = nav ? nav.offsetHeight : 0;
+    const total = tbH + navH;
+    if (total > 0) {
+      document.documentElement.style.setProperty('--header-h', `${total}px`);
+      document.documentElement.style.setProperty('--header-total-height', `${total}px`);
+    }
+  }
+
+  function initHeaderHeightWatcher() {
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight, { passive: true });
+    window.addEventListener('load', updateHeaderHeight, { passive: true });
+  }
+
   function initScrollShadow() {
     if (!mainNav) return;
 
@@ -1633,7 +1696,7 @@
   // ==========================================================================
   function initMarginDriftingLeaves() {
     const container = document.getElementById('marginLeaves');
-    if (!container || prefersReducedMotion) return;
+    if (!container || prefersReducedMotion || window.innerWidth <= 899) return;
 
     // Fewer on mobile (2 on mobile, 4 on desktop)
     const isMobile = window.innerWidth <= 768;
@@ -1651,9 +1714,9 @@
       img.style.width = `${18 + Math.random() * 12}px`;
       img.style.height = 'auto';
 
-      // Position in left or right margin
+      // Position in left or right margin (kept safely inside viewport bounds)
       const isLeft = i % 2 === 0;
-      const xPercent = isLeft ? 2 + Math.random() * 6 : 92 + Math.random() * 5;
+      const xPercent = isLeft ? 2 + Math.random() * 4 : 88 + Math.random() * 4;
       img.style.left = `${xPercent}vw`;
       img.style.top = `${15 + i * 22}vh`;
 
@@ -1822,10 +1885,18 @@
     }
   }
 
+  function initPrivacyToc() {
+    const toc = document.getElementById('privacyToc');
+    if (toc && window.innerWidth <= 600) {
+      toc.removeAttribute('open');
+    }
+  }
+
   // ==========================================================================
   // 14. INITIALIZATION
   // ==========================================================================
   function onHeroBgReady(callback) {
+    if (!stage && !heroBg) return;
     let fired = false;
     const done = () => {
       if (fired) return;
@@ -1844,6 +1915,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    initHeaderHeightWatcher();
     // Seamless fallback for mobile portrait source until client supplies the file
     const mobilePortraitSource = document.querySelector('source[srcset*="hero-bg-mobile.jpg"]');
     if (mobilePortraitSource) {
@@ -1858,6 +1930,7 @@
 
     initMobileDrawer();
     initScrollShadow();
+    initPrivacyToc();
     initFireflies();
     initParallax();
     initSmoothScroll();
@@ -1872,23 +1945,27 @@
     initScrollReveal();
     initMarginDriftingLeaves();
 
-    // Hero intro ,  background is ALWAYS visible, never fades from opacity 0
-    onHeroBgReady(() => {
-      const hasPlayed = sessionStorage.getItem(CONFIG.storageKeyIntro) === 'true';
+    // Hero intro: only runs if hero elements are present
+    if (stage || heroBg) {
+      onHeroBgReady(() => {
+        const hasPlayed = sessionStorage.getItem(CONFIG.storageKeyIntro) === 'true';
 
-      if (prefersReducedMotion || hasPlayed) {
-        skipToFinalState();
-      } else {
-        runIntroSequence();
-      }
-    });
+        if (prefersReducedMotion || hasPlayed) {
+          skipToFinalState();
+        } else {
+          runIntroSequence();
+        }
+      });
+    }
 
-    // Load leaf sprites in parallel (never blocks intro)
-    preloadSprites(() => {
-      resizeCanvas();
-      initLeaves();
-      requestAnimationFrame(animateLeaves);
-    });
+    // Load leaf sprites in parallel (never blocks intro) - only if canvas and stage exist
+    if (leavesCanvas && stage) {
+      preloadSprites(() => {
+        resizeCanvas();
+        initLeaves();
+        requestAnimationFrame(animateLeaves);
+      });
+    }
   });
 
 })();

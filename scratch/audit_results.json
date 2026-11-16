@@ -1,0 +1,662 @@
+{
+  "viewports": {
+    "homepage": {
+      "360": {
+        "scrollW": 360,
+        "innerW": 360,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "140px",
+        "h1Top": 288,
+        "h1Clearance": 166,
+        "drawerState": {
+          "openClass": false,
+          "bodyLock": false,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "390": {
+        "scrollW": 390,
+        "innerW": 390,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 298,
+        "h1Clearance": 176,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "430": {
+        "scrollW": 430,
+        "innerW": 430,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 298,
+        "h1Clearance": 176,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "768": {
+        "scrollW": 768,
+        "innerW": 768,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 282,
+        "h1Clearance": 160,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "1024": {
+        "scrollW": 1009,
+        "innerW": 1024,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 262,
+        "h1Clearance": 140,
+        "drawerState": null
+      },
+      "1280": {
+        "scrollW": 1265,
+        "innerW": 1280,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 299,
+        "h1Clearance": 177,
+        "drawerState": null
+      },
+      "1440": {
+        "scrollW": 1425,
+        "innerW": 1440,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 290,
+        "h1Clearance": 168,
+        "drawerState": null
+      }
+    },
+    "author": {
+      "360": {
+        "scrollW": 360,
+        "innerW": 360,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "390": {
+        "scrollW": 390,
+        "innerW": 390,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "430": {
+        "scrollW": 430,
+        "innerW": 430,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "768": {
+        "scrollW": 768,
+        "innerW": 768,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "1024": {
+        "scrollW": 1009,
+        "innerW": 1024,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": null
+      },
+      "1280": {
+        "scrollW": 1265,
+        "innerW": 1280,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": null
+      },
+      "1440": {
+        "scrollW": 1425,
+        "innerW": 1440,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 187,
+        "h1Clearance": 65,
+        "drawerState": null
+      }
+    },
+    "privacy": {
+      "360": {
+        "scrollW": 360,
+        "innerW": 360,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "390": {
+        "scrollW": 390,
+        "innerW": 390,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "430": {
+        "scrollW": 430,
+        "innerW": 430,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "768": {
+        "scrollW": 768,
+        "innerW": 768,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": {
+          "openClass": true,
+          "bodyLock": true,
+          "closeClass": false,
+          "bodyUnlock": true,
+          "scrolled": true
+        }
+      },
+      "1024": {
+        "scrollW": 1009,
+        "innerW": 1024,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": null
+      },
+      "1280": {
+        "scrollW": 1265,
+        "innerW": 1280,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": null
+      },
+      "1440": {
+        "scrollW": 1425,
+        "innerW": 1440,
+        "hasHScroll": false,
+        "wide": [],
+        "totalHeaderH": 122,
+        "cssHeaderH": "122px",
+        "h1Top": 154,
+        "h1Clearance": 32,
+        "drawerState": null
+      }
+    }
+  },
+  "homepage": {
+    "hero": {
+      "h1": "Where Stories Take Root",
+      "brand": "Under The Tuba Tree",
+      "tagline": "Stories that grow from the heart.",
+      "intro": "Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.",
+      "btns": []
+    },
+    "explore": {
+      "expH2": "Explore Our Stories",
+      "expIntro": "Every story has a little something to share. Discover stories that nurture hearts, celebrate our roots and bring imagination to life.",
+      "expCards": [
+        {
+          "title": "Heartfelt Stories",
+          "desc": "Stories about love, family, hope, loss and the feelings that connect us.",
+          "imgSrc": "assets/heartfelt-stories.webp"
+        },
+        {
+          "title": "Little Roots",
+          "desc": "Pakistani childhood, cousin adventures, family traditions and imaginative tales.",
+          "imgSrc": "assets/images/little-roots.png"
+        },
+        {
+          "title": "Dreams & Deen",
+          "desc": "Stories inspired by faith, kindness, Islamic values and childhood imagination.",
+          "imgSrc": "assets/images/dreams-deen.png"
+        }
+      ]
+    },
+    "featuredBook": {
+      "fbTitle": "Whispers from Jannah",
+      "fbStatus": "Growing quietly, and almost ready to share.",
+      "fbDesc": [],
+      "fbThemes": []
+    },
+    "storyGarden": {
+      "sgH2": "What\u2019s Growing Beneath Our Tree?",
+      "sgIntro": "Every story begins with a seed. Here\u2019s what we\u2019re nurturing.",
+      "sgCards": [
+        {
+          "badge": "Our first book",
+          "title": "Whispers from Jannah",
+          "btnText": "Learn about the book",
+          "btnHref": "#featured-book",
+          "imgSrc": "assets/garden-bloom-900.webp",
+          "imgAlt": "A blossoming tree glowing with lanterns beneath a crescent moon, our first book"
+        },
+        {
+          "badge": "In development",
+          "title": "Little Roots: Pakistani Stories Collection",
+          "btnText": "Discover Little Roots",
+          "btnHref": "#little-roots",
+          "imgSrc": "assets/garden-sprout-900.webp",
+          "imgAlt": "A young mango sapling in a sunlit Pakistani courtyard, a collection in development"
+        },
+        {
+          "badge": "Future ideas",
+          "title": "More Stories Under the Tree",
+          "btnText": "Join Our Story Circle",
+          "btnHref": "#story-circle",
+          "imgSrc": "assets/garden-seed-900.webp",
+          "imgAlt": "A golden seed glowing in the soil beneath a twilight sky, future story ideas"
+        }
+      ]
+    },
+    "littleRoots": {
+      "lrTitle": "Little Roots",
+      "lrTagline": "The Pakistani childhood you remember, in picture-book form.",
+      "lrParas": [],
+      "lrItems": [
+        "Pakistani childhood memories",
+        "Cousin adventures",
+        "Family traditions",
+        "Imaginative jinn tales",
+        "Cultural celebrations",
+        "Islamic values woven into everyday stories"
+      ]
+    },
+    "author": {
+      "authorH2": "Meet Tuba Seyal",
+      "authorTagline": "Author. Storyteller. Dreamer.",
+      "authorLetter": []
+    },
+    "signup": {
+      "scHeading": "Get notified.",
+      "scPromise": "One email when the book is ready. That's it.",
+      "scConsent": "I agree to receive emails from Under The Tuba Tree. Unsubscribe anytime. Privacy Policy",
+      "scPrivacyLink": "/privacy-policy"
+    },
+    "contact": {
+      "ctHeading": "Let's Connect",
+      "ctIntro": "Have a question, a story to share, or an opportunity to collaborate? I'd love to hear from you.",
+      "ctEmail": "mailto:hello@underthetubatree.com",
+      "ctInsta": "https://instagram.com/underthetubatree",
+      "ctFbDisplay": "none"
+    },
+    "footer": {
+      "ftLogo": "assets/logo-light.png",
+      "ftTagline": "Stories that grow from the heart.",
+      "ftLinks": [
+        {
+          "text": "Books",
+          "href": "#explore"
+        },
+        {
+          "text": "Story Garden",
+          "href": "#story-garden"
+        },
+        {
+          "text": "About",
+          "href": "#author"
+        },
+        {
+          "text": "Contact",
+          "href": "#contact"
+        }
+      ],
+      "ftInsta": "https://instagram.com/underthetubatree",
+      "ftFbDisplay": "none",
+      "ftPrivacy": "/privacy-policy",
+      "ftClosing": "Thank you for spending a little time beneath our tree.",
+      "ftCopyright": "\u00a9 2026 Tuba Seyal. All rights reserved."
+    }
+  },
+  "lookInside": {
+    "modalFound": false,
+    "slideCount": 0,
+    "slides": []
+  },
+  "signupTest": {
+    "error": "form not found"
+  },
+  "contactTest": {
+    "action": "#",
+    "method": "post",
+    "successShown": false,
+    "successText": "Thank you, your message is on its way. I'll reply as soon as I can.",
+    "errorShown": false
+  },
+  "metaAudit": {
+    "homepage": {
+      "title": "Under The Tuba Tree | Stories \u2022 Dreams \u2022 Deen",
+      "canonical": "https://underthetubatree.vercel.app/",
+      "description": "Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.",
+      "ogType": "website",
+      "ogSiteName": "Under The Tuba Tree",
+      "ogTitle": "Under The Tuba Tree | Stories \u2022 Dreams \u2022 Deen",
+      "ogDesc": "Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.",
+      "ogUrl": "https://underthetubatree.vercel.app/",
+      "ogImage": "https://underthetubatree.vercel.app/assets/share-image.jpg",
+      "ogImageW": "1200",
+      "ogImageH": "630",
+      "ogImageAlt": "Under The Tuba Tree moonlit scene with a blooming tree, glowing lanterns, and a young girl reading",
+      "twCard": "summary_large_image",
+      "twTitle": "Under The Tuba Tree | Stories \u2022 Dreams \u2022 Deen",
+      "twDesc": "Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.",
+      "twImage": "https://underthetubatree.vercel.app/assets/share-image.jpg"
+    },
+    "author": {
+      "title": "About | Under The Tuba Tree",
+      "canonical": "https://underthetubatree.vercel.app/author.html",
+      "description": "Meet Tuba Seyal, the author behind Under The Tuba Tree \u2014 creating heartfelt stories that celebrate cultural roots, nurture imagination, and comfort little hearts.",
+      "ogType": "profile",
+      "ogSiteName": "Under The Tuba Tree",
+      "ogTitle": "About | Under The Tuba Tree",
+      "ogDesc": "Meet Tuba Seyal, the author behind Under The Tuba Tree \u2014 creating heartfelt stories that celebrate cultural roots, nurture imagination, and comfort little hearts.",
+      "ogUrl": "https://underthetubatree.vercel.app/author.html",
+      "ogImage": "https://underthetubatree.vercel.app/assets/author.webp",
+      "twCard": "summary",
+      "twTitle": "About | Under The Tuba Tree",
+      "twDesc": "Meet Tuba Seyal, the author behind Under The Tuba Tree \u2014 creating heartfelt stories that celebrate cultural roots, nurture imagination, and comfort little hearts.",
+      "twImage": "https://underthetubatree.vercel.app/assets/author.webp"
+    },
+    "privacy": {
+      "title": "Privacy Policy | Under The Tuba Tree",
+      "canonical": "https://underthetubatree.vercel.app/privacy-policy",
+      "description": "Read the Privacy Policy for Under The Tuba Tree. Learn how author Tuba Seyal protects visitor information, newsletter details, and your choices.",
+      "ogType": "website",
+      "ogSiteName": "Under The Tuba Tree",
+      "ogTitle": "Privacy Policy | Under The Tuba Tree",
+      "ogDesc": "Read the Privacy Policy for Under The Tuba Tree. Learn how author Tuba Seyal protects visitor information, newsletter details, and your choices.",
+      "ogUrl": "https://underthetubatree.vercel.app/privacy-policy",
+      "ogImage": "https://underthetubatree.vercel.app/assets/share-image.jpg",
+      "twCard": "summary",
+      "twTitle": "Privacy Policy | Under The Tuba Tree",
+      "twDesc": "Read the Privacy Policy for Under The Tuba Tree. Learn how author Tuba Seyal protects visitor information, newsletter details, and your choices.",
+      "twImage": "https://underthetubatree.vercel.app/assets/share-image.jpg"
+    }
+  },
+  "assets": {
+    "shareImage": {
+      "width": 1200,
+      "height": 630,
+      "sizeKB": 142.0
+    },
+    "oversized": [
+      {
+        "path": "assets\\ground.png",
+        "sizeKB": 572.2
+      },
+      {
+        "path": "assets\\leaf-pair.png",
+        "sizeKB": 567.0
+      },
+      {
+        "path": "assets\\little-roots.webp",
+        "sizeKB": 623.1
+      },
+      {
+        "path": "assets\\logo-light.png",
+        "sizeKB": 506.3
+      },
+      {
+        "path": "assets\\look-inside-2.png",
+        "sizeKB": 3184.5
+      },
+      {
+        "path": "assets\\look-inside-3.png",
+        "sizeKB": 2536.2
+      },
+      {
+        "path": "assets\\look-inside-4.png",
+        "sizeKB": 3124.1
+      },
+      {
+        "path": "assets\\Moonlit_Blossom_Tree_with_Glowing_Lanterns.png",
+        "sizeKB": 2630.3
+      },
+      {
+        "path": "assets\\reader-original.png",
+        "sizeKB": 1300.0
+      },
+      {
+        "path": "assets\\reader.png",
+        "sizeKB": 1322.9
+      },
+      {
+        "path": "assets\\Sunlit_Mango_Courtyard_with_Charpai.png",
+        "sizeKB": 2583.7
+      },
+      {
+        "path": "assets\\tree-night.png",
+        "sizeKB": 1498.4
+      },
+      {
+        "path": "assets\\tree.png",
+        "sizeKB": 1498.4
+      },
+      {
+        "path": "assets\\Twilight_Garden_Seedling_Magic.png",
+        "sizeKB": 2214.1
+      },
+      {
+        "path": "assets\\images\\dreams-deen.png",
+        "sizeKB": 2760.0
+      },
+      {
+        "path": "assets\\images\\ground.png.png",
+        "sizeKB": 763.4
+      },
+      {
+        "path": "assets\\images\\heartfelt-stories..png",
+        "sizeKB": 2659.4
+      },
+      {
+        "path": "assets\\images\\hero-bg.png.png",
+        "sizeKB": 2599.4
+      },
+      {
+        "path": "assets\\images\\leaf-amber.png.png",
+        "sizeKB": 1016.1
+      },
+      {
+        "path": "assets\\images\\leaf-gold.png.png",
+        "sizeKB": 776.2
+      },
+      {
+        "path": "assets\\images\\leaf-green.png.png",
+        "sizeKB": 527.1
+      },
+      {
+        "path": "assets\\images\\leaf-olive-dark.pngleaf-olive-dark.png.png",
+        "sizeKB": 522.0
+      },
+      {
+        "path": "assets\\images\\leaf-olive.png.png",
+        "sizeKB": 860.8
+      },
+      {
+        "path": "assets\\images\\leaf-olive2.png.png",
+        "sizeKB": 818.8
+      },
+      {
+        "path": "assets\\images\\leaf-pair.png.png",
+        "sizeKB": 567.0
+      },
+      {
+        "path": "assets\\images\\leaf-plum.png.png",
+        "sizeKB": 514.0
+      },
+      {
+        "path": "assets\\images\\little-roots.png",
+        "sizeKB": 3261.9
+      },
+      {
+        "path": "assets\\images\\reader.png.png",
+        "sizeKB": 1300.0
+      },
+      {
+        "path": "assets\\images\\tree.png.png",
+        "sizeKB": 1498.4
+      }
+    ]
+  },
+  "textIssues": {
+    "deadLinks": [],
+    "todos": 0,
+    "lorem": 0,
+    "placeholders": [
+      {
+        "tag": "MARK",
+        "text": "[Launch date]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[If you use analytics, add: We use [analytics tool name] to understand how visitors use the site, for example which pages are most popular. This information is used in aggregate.]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[MailerLite / Mailchimp]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[MailerLite / Mailchimp]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[Analytics provider, if used.]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[analytics cookies, if used]"
+      },
+      {
+        "tag": "MARK",
+        "text": "[Mailing address, if provided]"
+      }
+    ]
+  }
+}

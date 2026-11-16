@@ -45,9 +45,10 @@
   --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Layout & Sizing */
+  --header-h: 122px;
   --top-bar-height: 38px;
   --nav-height: 84px;
-  --header-total-height: calc(var(--top-bar-height) + var(--nav-height));
+  --header-total-height: var(--header-h);
 
   /* Hero BG image path (easy to swap for WordPress / portrait) */
   --hero-bg-url: url('assets/hero-bg.jpg');
@@ -69,7 +70,21 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
   font-size: 16px;
+}
+
+/* Scroll margin top on all anchored headings, hero containers & sections */
+section[id],
+h1[id],
+h2[id],
+h3[id],
+.author-page-hero,
+.privacy-hero,
+.privacy-section,
+#mainAuthorContent,
+#mainContent {
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 body {
@@ -430,12 +445,21 @@ input:focus-visible {
   align-items: center;
   width: 44px;
   height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 1001;
   gap: 6px;
+  touch-action: manipulation;
+  border-radius: 8px;
+}
+
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
 }
 
 .menu-toggle .bar {
@@ -492,12 +516,13 @@ input:focus-visible {
   gap: 0.5rem;
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: -4px 0 24px rgba(84, 45, 69, 0.15);
+  box-shadow: none;
   overflow-y: auto;
 }
 
 .mobile-drawer.open .mobile-drawer__panel {
   transform: translateX(0);
+  box-shadow: -8px 0 32px rgba(84, 45, 69, 0.15);
 }
 
 .mobile-drawer__close {
@@ -506,6 +531,8 @@ input:focus-visible {
   right: 1.25rem;
   width: 44px;
   height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -515,10 +542,16 @@ input:focus-visible {
   cursor: pointer;
   border-radius: 8px;
   transition: background-color 0.2s ease;
+  touch-action: manipulation;
 }
 
 .mobile-drawer__close:hover {
   background-color: rgba(84, 45, 69, 0.06);
+}
+
+.mobile-drawer__close:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .mobile-drawer__links {
@@ -541,6 +574,7 @@ input:focus-visible {
   border-radius: 8px;
   min-height: 48px;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  touch-action: manipulation;
 }
 
 .mobile-drawer__link:hover,
@@ -551,6 +585,11 @@ input:focus-visible {
   border-left: 3px solid var(--color-warm-gold);
   padding-left: 0.7rem;
   transform: translateX(4px);
+}
+
+.mobile-drawer__link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .mobile-drawer__cta {
@@ -2146,7 +2185,7 @@ body.skip-intro-active .hero-action {
 /* Dedicated Author Page Styles */
 .author-page-main {
   background-color: #FFF9F2;
-  padding: 56px 20px 80px;
+  padding: calc(var(--header-h) + 32px) 20px 80px;
   min-height: 70vh;
 }
 
@@ -2323,7 +2362,7 @@ body.skip-intro-active .hero-action {
 
 @media (max-width: 600px) {
   .author-page-main {
-    padding: 40px 20px 60px;
+    padding: calc(var(--header-h) + 32px) 20px 60px;
   }
   .author-page-hero {
     margin-bottom: 2rem;
@@ -2748,7 +2787,7 @@ body.skip-intro-active .hero-action {
 
 /* Top Intro Band */
 .privacy-hero {
-  padding: 56px 20px 40px;
+  padding: calc(var(--header-h) + 32px) 20px 40px;
   text-align: center;
   border-bottom: 1px solid rgba(201, 162, 90, 0.5); /* Thin gold line 1px at 50% only under H1 band */
 }
@@ -2888,7 +2927,7 @@ body.skip-intro-active .hero-action {
   margin-top: 44px;
   margin-bottom: 12px;
   line-height: 1.25;
-  scroll-margin-top: calc(var(--header-height, 76px) + 16px);
+  scroll-margin-top: calc(var(--header-h) + 16px);
   border: none;
 }
 
@@ -2950,7 +2989,7 @@ body.skip-intro-active .hero-action {
 
 @media (max-width: 600px) {
   .privacy-hero {
-    padding: 40px 20px 32px;
+    padding: calc(var(--header-h) + 32px) 20px 32px;
   }
   .privacy-content {
     padding: 28px 20px 60px;
@@ -3560,17 +3599,6 @@ body.skip-intro-active .hero-action {
     font-size: 20px;
   }
 
-  /* Switch to hamburger on tablets to prevent 7-item navigation collision */
-  .menu-toggle {
-    display: flex;
-    align-self: center;
-    margin: 0;
-  }
-
-  .nav-menu--desktop {
-    display: none;
-  }
-
   /* Tablet Landscape overlap prevention (900px - 1024px) */
   .hero-content {
     padding: 0 0 0 5vw;
@@ -3624,6 +3652,26 @@ body.skip-intro-active .hero-action {
    The reading girl in the bottom right corner is 100% visible and uncovered.
    ========================================================================== */
 @media (max-width: 899.98px) {
+  :root {
+    --header-h: 140px;
+    --header-total-height: var(--header-h);
+  }
+
+  .margin-leaves {
+    display: none !important;
+  }
+
+  /* Show hamburger and hide desktop menu on mobile and small tablets (≤ 899px) */
+  .menu-toggle {
+    display: flex;
+    align-self: center;
+    margin: 0;
+  }
+
+  .nav-menu--desktop {
+    display: none;
+  }
+
   /* Hero section fills viewport height in the first screen view */
   .hero-section {
     position: relative !important;
@@ -4321,7 +4369,7 @@ body.skip-intro-active .hero-action {
 
   /* Author Dedicated Page Mobile */
   .author-page-main {
-    padding: 64px 20px;
+    padding: calc(var(--header-h) + 32px) 20px 64px;
   }
 
   .author-placeholder-card {

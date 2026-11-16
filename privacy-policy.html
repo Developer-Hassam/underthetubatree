@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=36">
+  <link rel="stylesheet" href="/style.css?v=36">
 </head>
 <body class="page-privacy">
 
@@ -287,45 +287,7 @@
     </div>
   </footer>
 
-  <!-- Light navigation and mobile drawer script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Mobile drawer toggle
-      const menuToggle = document.getElementById('menuToggle');
-      const mobileDrawer = document.getElementById('mobileDrawer');
-      const drawerClose = document.getElementById('drawerClose');
-      const drawerBackdrop = document.getElementById('drawerBackdrop');
-
-      function openDrawer() {
-        if (!mobileDrawer) return;
-        mobileDrawer.hidden = false;
-        mobileDrawer.classList.add('is-open');
-        menuToggle?.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeDrawer() {
-        if (!mobileDrawer) return;
-        mobileDrawer.classList.remove('is-open');
-        menuToggle?.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        setTimeout(() => {
-          if (!mobileDrawer.classList.contains('is-open')) {
-            mobileDrawer.hidden = true;
-          }
-        }, 300);
-      }
-
-      menuToggle?.addEventListener('click', openDrawer);
-      drawerClose?.addEventListener('click', closeDrawer);
-      drawerBackdrop?.addEventListener('click', closeDrawer);
-
-      // Mobile TOC default collapse on narrow viewports
-      const toc = document.getElementById('privacyToc');
-      if (toc && window.innerWidth <= 600) {
-        toc.removeAttribute('open');
-      }
-    });
-  </script>
+  <!-- Shared site script -->
+  <script src="/script.js?v=37" defer></script>
 </body>
 </html>
