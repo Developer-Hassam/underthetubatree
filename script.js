@@ -8,6 +8,10 @@
 (function () {
   'use strict';
 
+  // Domain configuration (update here when moving to custom domain)
+  const SITE_URL = 'https://underthetubatree.vercel.app';
+  window.SITE_URL = SITE_URL;
+
   // ==========================================================================
   // FALLING LEAVES CONFIGURATION (Hero Background Tuning)
   // Expose leaf tuning parameters cleanly at the top of script.js
@@ -87,14 +91,13 @@
   const SITE_CONTENT = {
     topBar: {
       tagline: 'Stories • Dreams • Deen',
-      ctaText: 'Join our Story Circle',
+      ctaText: 'Get notified',
       ctaHref: '#story-circle'
     },
     navigation: [
-      { label: 'Home', href: '#top' },
-      { label: 'Our Books', href: '#explore' },
-      { label: 'The Story Garden', href: '#story-garden' },
-      { label: 'Meet the Author', href: '#author' },
+      { label: 'Books', href: '#explore' },
+      { label: 'Story Garden', href: '#story-garden' },
+      { label: 'About', href: '#author' },
       { label: 'Contact', href: '#contact' }
     ],
     hero: {
@@ -103,7 +106,7 @@
       headline: 'Where Stories Take Root',
       brand: 'Under The Tuba Tree',
       tagline: 'Stories that grow from the heart.',
-      intro: 'Welcome beneath our tree, where imagination blooms, stories take root and every little heart has a place to belong.',
+      intro: 'Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.',
       btnExploreText: 'Explore Our Stories',
       btnExploreHref: '#explore',
       btnAuthorText: 'Meet the Author',
@@ -171,15 +174,28 @@
       audienceText: 'A gentle, heartfelt story that can help families approach difficult emotions and conversations. Ages 4 to 8, also ideal for parent or caregiver read-aloud.',
       buyUrl: '',
       btnCopyText: 'Get your copy',
-      btnCopyDisabledText: 'Coming soon',
-      btnCopyDisabledNote: 'Purchase link coming soon',
+      statusText: 'Growing quietly, and almost ready to share.',
+      btnNotifyText: 'Get notified',
       btnInsideText: 'Look inside',
       lookInsideHeading: 'A glimpse inside Whispers from Jannah',
       lookInsideNote: 'Preview artwork. The full story is in the book.',
       lookInsideImages: [
-        'assets/look-inside-1.webp',
-        'assets/look-inside-2.webp',
-        'assets/look-inside-3.webp'
+        {
+          src: 'assets/look-inside-1.webp',
+          alt: 'Whispers from Jannah book cover'
+        },
+        {
+          src: 'assets/look-inside-2.webp',
+          alt: 'Mother and daughter by a river with a palace in the distance'
+        },
+        {
+          src: 'assets/look-inside-3.webp',
+          alt: 'A glowing palace made of clouds in the sky'
+        },
+        {
+          src: 'assets/look-inside-4.webp',
+          alt: 'Mother and daughter walking hand in hand toward a sunset palace'
+        }
       ]
     },
     storyGarden: {
@@ -189,7 +205,7 @@
     littleRoots: {
       label: 'Pakistani Stories Collection',
       heading: 'Little Roots',
-      tagline: 'Little stories. Big roots. A lifetime of memories.',
+      tagline: 'The Pakistani childhood you remember, in picture-book form.',
       question: 'What does growing up Pakistani feel like?',
       paragraph1: 'It\'s endless cousin adventures, summer afternoons beneath mango trees, family gatherings filled with laughter, familiar traditions and whispered stories that make bedtime a little more magical.',
       paragraph2: 'Little Roots is a growing collection celebrating the beauty of Pakistani childhood through stories filled with culture, family, imagination and faith.',
@@ -204,7 +220,7 @@
       ],
       badge: 'In Development',
       statusLine: 'In Development',
-      btnText: 'Follow along in our Story Circle',
+      btnText: 'Get notified',
       btnHref: '#story-circle',
       image: 'assets/little-roots.webp',
       imageAlt: 'Children playing beneath a mango tree in a warm Pakistani courtyard'
@@ -895,13 +911,15 @@
   // ==========================================================================
   function initFeaturedBook() {
     const fb = SITE_CONTENT.featuredBook;
-    const buyBtn = document.getElementById('featuredBookBuyBtn');
-    const buyNote = document.getElementById('featuredBookBuyNote');
     const buyWrap = document.getElementById('featuredBookBuyWrap');
 
-    // Dynamic buy button: if buyUrl is filled, show active gold link
-    if (fb.buyUrl && fb.buyUrl.trim() !== '' && buyWrap) {
-      buyWrap.innerHTML = `<a href="${fb.buyUrl}" class="btn-gold" target="_blank" rel="noopener">${fb.btnCopyText}</a>`;
+    // Dynamic buy button: if buyUrl is filled, show active gold link; otherwise anchor to #story-circle
+    if (buyWrap) {
+      if (fb.buyUrl && fb.buyUrl.trim() !== '') {
+        buyWrap.innerHTML = `<a href="${fb.buyUrl}" class="btn-gold" target="_blank" rel="noopener">${fb.btnCopyText}</a>`;
+      } else {
+        buyWrap.innerHTML = `<a href="#story-circle" class="btn-gold" id="featuredBookBuyBtn" aria-label="Get notified when Whispers from Jannah is ready">Get notified</a>`;
+      }
     }
 
     // ---- Look Inside Lightbox ----
@@ -921,9 +939,10 @@
 
     function updateSlide(idx) {
       currentIndex = idx;
-      if (lightboxImg) {
-        lightboxImg.src = images[currentIndex];
-        lightboxImg.alt = `Whispers from Jannah preview page ${currentIndex + 1}`;
+      const item = images[currentIndex];
+      if (lightboxImg && item) {
+        lightboxImg.src = typeof item === 'string' ? item : item.src;
+        lightboxImg.alt = (typeof item === 'object' && item.alt) ? item.alt : `Whispers from Jannah preview page ${currentIndex + 1}`;
       }
       if (lightboxCounter) {
         lightboxCounter.textContent = `Page ${currentIndex + 1} of ${images.length}`;
@@ -1707,7 +1726,7 @@
     }
 
     const sectionToNavMap = {
-      'top': 'top',
+      'top': null,
       'explore': 'explore',
       'featured-book': 'explore',
       'story-garden': 'story-garden',
@@ -1732,10 +1751,10 @@
     const drawerLinks = document.querySelectorAll('.mobile-drawer__link');
 
     function setActive(targetId) {
-      const mappedId = sectionToNavMap[targetId] || targetId;
+      const mappedId = sectionToNavMap[targetId];
       desktopLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href === `#${mappedId}` || (mappedId === 'top' && (href === '#top' || href === '#'))) {
+        if (mappedId && href === `#${mappedId}`) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -1743,7 +1762,7 @@
       });
       drawerLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href === `#${mappedId}` || (mappedId === 'top' && (href === '#top' || href === '#'))) {
+        if (mappedId && href === `#${mappedId}`) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -1752,7 +1771,7 @@
     }
 
     if (!('IntersectionObserver' in window)) {
-      setActive('top');
+      setActive('explore');
       return;
     }
 

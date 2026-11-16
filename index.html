@@ -4,7 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Under The Tuba Tree | Stories • Dreams • Deen</title>
-  <meta name="description" content="Under The Tuba Tree, heartfelt children's books woven with love, Islamic values, and Pakistani heritage by Tuba Seyal.">
+  <meta name="description" content="Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.">
+  <link rel="canonical" href="https://underthetubatree.vercel.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Under The Tuba Tree">
+  <meta property="og:title" content="Under The Tuba Tree | Stories • Dreams • Deen">
+  <meta property="og:description" content="Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.">
+  <meta property="og:image" content="https://underthetubatree.vercel.app/assets/share-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Under The Tuba Tree moonlit scene with a blooming tree, glowing lanterns, and a young girl reading">
+  <meta property="og:url" content="https://underthetubatree.vercel.app/">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Under The Tuba Tree | Stories • Dreams • Deen">
+  <meta name="twitter:description" content="Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.">
+  <meta name="twitter:image" content="https://underthetubatree.vercel.app/assets/share-image.jpg">
 
   <!-- Google Fonts Preconnect & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +50,7 @@
       <p class="top-bar__tagline">
         Stories <span class="bullet" aria-hidden="true">•</span> Dreams <span class="bullet" aria-hidden="true">•</span> Deen
       </p>
-      <a href="#story-circle" class="top-bar__cta-btn">Join our Story Circle</a>
+      <a href="#story-circle" class="top-bar__cta-btn" aria-label="Get notified when books are ready">Get notified</a>
     </div>
   </header>
 
@@ -45,10 +64,9 @@
 
       <!-- Desktop Navigation Links -->
       <ul class="nav-menu nav-menu--desktop" id="navMenuDesktop">
-        <li><a href="#top" class="nav-link active">Home</a></li>
-        <li><a href="#explore" class="nav-link">Our Books</a></li>
-        <li><a href="#story-garden" class="nav-link">The Story Garden</a></li>
-        <li><a href="#author" class="nav-link">Meet the Author</a></li>
+        <li><a href="#explore" class="nav-link">Books</a></li>
+        <li><a href="#story-garden" class="nav-link">Story Garden</a></li>
+        <li><a href="#author" class="nav-link">About</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
 
@@ -71,13 +89,12 @@
         </svg>
       </button>
       <ul class="mobile-drawer__links">
-        <li><a href="#top" class="mobile-drawer__link active">Home</a></li>
-        <li><a href="#explore" class="mobile-drawer__link">Our Books</a></li>
-        <li><a href="#story-garden" class="mobile-drawer__link">The Story Garden</a></li>
-        <li><a href="#author" class="mobile-drawer__link">Meet the Author</a></li>
+        <li><a href="#explore" class="mobile-drawer__link">Books</a></li>
+        <li><a href="#story-garden" class="mobile-drawer__link">Story Garden</a></li>
+        <li><a href="#author" class="mobile-drawer__link">About</a></li>
         <li><a href="#contact" class="mobile-drawer__link">Contact</a></li>
       </ul>
-      <a href="#story-circle" class="mobile-drawer__cta btn-gold">Join our Story Circle</a>
+      <a href="#story-circle" class="mobile-drawer__cta btn-gold" aria-label="Get notified when books are ready">Get notified</a>
     </div>
   </div>
 
@@ -140,7 +157,7 @@
       <h1 class="hero-headline" id="heroHeadline">Where Stories <br class="hero-headline__br">Take Root</h1>
       <p class="hero-brand" id="heroBrand">Under The Tuba Tree</p>
       <p class="hero-tagline" id="heroTagline">Stories that grow from the heart.</p>
-      <p class="hero-intro" id="heroIntro">Welcome beneath our tree, where imagination blooms, stories take root and every little heart has a place to belong.</p>
+      <p class="hero-intro" id="heroIntro">Picture books rooted in faith, family and Pakistani heritage, for little hearts who need to feel seen.</p>
       <div class="hero-action" id="heroAction">
         <a href="#explore" class="btn-gold hero-btn hero-btn--gold" id="exploreBtn">
           Explore Our Stories
@@ -190,6 +207,7 @@
         <span class="featured-book__eyebrow-badge">Featured book</span>
         <h2 class="featured-book__section-heading">Our First Little Story</h2>
         <h3 class="featured-book__title">Whispers from Jannah</h3>
+        <p class="featured-book__status">Growing quietly, and almost ready to share.</p>
         <p class="featured-book__desc">A tender story of love, loss, faith and hope. Whispers from Jannah offers a gentle perspective on the comfort of knowing our loved ones are safe in Jannah.</p>
         <p class="featured-book__desc">A heartfelt story created to offer comfort and open meaningful conversations about love, loss and remembrance.</p>
 
@@ -214,8 +232,7 @@
         <div class="featured-book__actions" id="featuredBookActions">
           <!-- Rendered dynamically by script based on buyUrl -->
           <div class="featured-book__buy-group" id="featuredBookBuyWrap">
-            <button type="button" class="btn-gold btn-disabled" id="featuredBookBuyBtn" disabled aria-disabled="true">Coming soon</button>
-            <span class="featured-book__buy-note" id="featuredBookBuyNote">Purchase link coming soon</span>
+            <a href="#story-circle" class="btn-gold" id="featuredBookBuyBtn" aria-label="Get notified when Whispers from Jannah is ready">Get notified</a>
           </div>
           <button type="button" class="btn-outline" id="lookInsideBtn" aria-haspopup="dialog">Look inside</button>
         </div>
@@ -253,23 +270,6 @@
 
   </section>
 
-  <!-- ===== NOTIFY MODAL ===== -->
-  <div class="notify-modal" id="notifyModal" role="dialog" aria-label="Get notified when this book is available" aria-modal="true" hidden>
-    <div class="notify-modal__backdrop" id="notifyBackdrop"></div>
-    <div class="notify-modal__card" id="notifyCard">
-      <button class="notify-modal__close" id="notifyClose" aria-label="Close notification signup">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <h3 class="notify-modal__heading" id="notifyHeading">Get Notified</h3>
-      <p class="notify-modal__desc" id="notifyDesc">We will let you know when this book is ready.</p>
-      <form class="notify-modal__form" id="notifyForm" action="#" method="post">
-        <input type="email" class="notify-modal__input" id="notifyEmail" placeholder="Your email address" aria-label="Email address" required>
-        <button type="submit" class="notify-modal__btn btn-gold">Notify Me</button>
-      </form>
-      <p class="notify-modal__success" id="notifySuccess" hidden>Thank you! We will be in touch.</p>
-    </div>
-  </div>
-
   <!-- ===== LOOK INSIDE ACCESSIBLE LIGHTBOX ===== -->
   <div class="lightbox" id="lookInsideLightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" hidden>
     <div class="lightbox__backdrop" id="lightboxBackdrop" aria-hidden="true"></div>
@@ -290,7 +290,7 @@
 
         <div class="lightbox__viewport" id="lightboxViewport">
           <div class="lightbox__img-wrap">
-            <img src="assets/look-inside-1.webp" alt="Whispers from Jannah preview page 1" class="lightbox__img" id="lightboxImg" width="800" height="1000">
+            <img src="assets/look-inside-1.webp" alt="Whispers from Jannah book cover" class="lightbox__img" id="lightboxImg">
           </div>
         </div>
 
@@ -300,7 +300,7 @@
       </div>
 
       <footer class="lightbox__footer">
-        <span class="lightbox__counter" id="lightboxCounter" aria-live="polite">Page 1 of 3</span>
+        <span class="lightbox__counter" id="lightboxCounter" aria-live="polite">Page 1 of 4</span>
       </footer>
     </div>
   </div>
@@ -324,7 +324,7 @@
         <div class="little-roots__content">
           <span class="little-roots__label">Pakistani Stories Collection</span>
           <h2 class="little-roots__heading">Little Roots</h2>
-          <p class="little-roots__tagline">Little stories. Big roots. A lifetime of memories.</p>
+          <p class="little-roots__tagline">The Pakistani childhood you remember, in picture-book form.</p>
 
           <h3 class="little-roots__question">What does growing up Pakistani feel like?</h3>
           <p class="little-roots__p">It's endless cousin adventures, summer afternoons beneath mango trees, family gatherings filled with laughter, familiar traditions and whispered stories that make bedtime a little more magical.</p>
@@ -365,7 +365,7 @@
               <svg class="little-roots__seed-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22V12"/><path d="M12 12c-3 0-5-2-5-5s2-4 3.5-4c.8 0 1.2.4 1.5.8.3-.4.7-.8 1.5-.8C15 3 17 4 17 7s-2 5-5 5z"/></svg>
               <span>In Development</span>
             </span>
-            <a href="#story-circle" class="btn-gold little-roots__cta-btn">Follow along in our Story Circle</a>
+            <a href="#story-circle" class="btn-gold little-roots__cta-btn" aria-label="Get notified about Little Roots collection">Get notified</a>
           </div>
         </div>
       </div>
@@ -388,6 +388,7 @@
         <p class="about-author__tagline">Author. Storyteller. Dreamer.</p>
 
         <div class="about-author__body">
+          <p class="about-author__leadin">I wrote Whispers from Jannah for the little ones who ask big questions, and the grown-ups who are searching for the words.</p>
           <p class="about-author__greeting">Welcome beneath my tree!</p>
           <p>I'm Tuba Seyal, the author behind Under The Tuba Tree, a little world created from a love of stories, meaningful connections and the magic of childhood.</p>
           <p>My hope is to create stories that reach beyond the pages, stories that nurture imagination, celebrate cultural roots, explore faith and offer comfort to little hearts.</p>
@@ -406,21 +407,20 @@
 
 
 
-  <!-- ===== SECTION 7: JOIN OUR STORY CIRCLE ===== -->
-  <section class="newsletter-band" id="story-circle" aria-label="Join our Story Circle">
+  <!-- ===== SECTION 7: GET NOTIFIED ===== -->
+  <section class="newsletter-band" id="story-circle" aria-label="Get notified">
     <div class="section__container newsletter-band__inner reveal-on-scroll">
       <!-- Rounded card with deep plum #542D45 background & faint botanical leaf pattern -->
       <div class="newsletter-card">
         <h2 class="newsletter-band__heading">
-          Join Our Story Circle
+          Get notified.
           <span class="leaf-ornament" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C12 21 18 16 18 10 C18 5 13 3 12 3 C11 3 6 5 6 10 C6 16 12 21 12 21 Z"/><path d="M12 3 L12 21"/></svg>
           </span>
         </h2>
-        <p class="newsletter-band__subtitle">Let's grow a little garden of stories together.</p>
-        <p class="newsletter-band__text">Be the first to hear about new books, upcoming collections, behind-the-scenes moments and little announcements from beneath our tree.</p>
+        <p class="newsletter-band__subtitle">One email when the book is ready. That's it.</p>
         
-        <form class="newsletter-form" id="newsletterForm" action="#" method="post" aria-label="Story Circle newsletter signup" novalidate>
+        <form class="newsletter-form" id="newsletterForm" action="#" method="post" aria-label="Get notified signup" novalidate>
           <!-- Visually hidden label -->
           <label for="newsletterEmail" class="sr-only">Your email address</label>
           
@@ -440,7 +440,7 @@
           <div class="newsletter-consent">
             <input type="checkbox" id="newsletterConsent" name="consent" class="newsletter-consent__checkbox" required>
             <label for="newsletterConsent" class="newsletter-consent__label">
-              I agree to receive emails from Under The Tuba Tree. I can unsubscribe at any time. <a href="/privacy-policy" class="newsletter-privacy-link">Read our Privacy Policy.</a>
+              I agree to receive emails from Under The Tuba Tree. Unsubscribe anytime. <a href="/privacy-policy" class="newsletter-privacy-link">Privacy Policy</a>
             </label>
           </div>
 
@@ -610,10 +610,9 @@
         <!-- Column 2: Navigation Links -->
         <div class="footer__col footer__col--links">
           <nav class="footer__nav" aria-label="Footer Navigation">
-            <a href="#top" class="footer__link">Home</a>
-            <a href="#explore" class="footer__link">Our Books</a>
-            <a href="#story-garden" class="footer__link">The Story Garden</a>
-            <a href="#author" class="footer__link">Meet the Author</a>
+            <a href="#explore" class="footer__link">Books</a>
+            <a href="#story-garden" class="footer__link">Story Garden</a>
+            <a href="#author" class="footer__link">About</a>
             <a href="#contact" class="footer__link">Contact</a>
           </nav>
         </div>
