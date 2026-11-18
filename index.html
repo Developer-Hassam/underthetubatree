@@ -246,7 +246,7 @@
     <!-- CSS stars background -->
     <div class="sg__stars" aria-hidden="true"></div>
     <!-- Slow decorative falling leaves (pointer-events none) -->
-    <div class="sg__falling-leaves" id="sgFallingLeaves" aria-hidden="true"></div>
+    <div class="sg__falling-leaves section-leaves-bg" id="sgFallingLeaves" aria-hidden="true"></div>
 
     <div class="section__container sg__container">
 
@@ -409,6 +409,8 @@
 
   <!-- ===== SECTION 7: GET NOTIFIED ===== -->
   <section class="newsletter-band" id="story-circle" aria-label="Get notified">
+    <!-- Slow decorative drifting leaves in section margins (pointer-events none, behind content) -->
+    <div class="section-leaves-bg" id="newsletterLeavesBg" aria-hidden="true"></div>
     <div class="section__container newsletter-band__inner reveal-on-scroll">
       <!-- Rounded card with deep plum #542D45 background & faint botanical leaf pattern -->
       <div class="newsletter-card">
@@ -432,7 +434,7 @@
 
           <!-- Email Input & Gold Subscribe Button -->
           <div class="newsletter-form__fields">
-            <input type="email" id="newsletterEmail" name="email" class="newsletter-form__input" placeholder="Your email address" required aria-describedby="newsletterMsg">
+            <input type="email" id="newsletterEmail" name="email" class="newsletter-form__input" placeholder="Your email address" required aria-describedby="newsletterStatus">
             <button type="submit" id="newsletterSubmitBtn" class="newsletter-form__btn btn-gold">Subscribe</button>
           </div>
 
@@ -447,10 +449,21 @@
           <!-- Note under the form -->
           <p class="newsletter-privacy-note">We respect your privacy. We will never share your email.</p>
 
-          <!-- Inline success and error messages -->
-          <div class="newsletter-form__messages" id="newsletterMsg" aria-live="polite">
-            <p class="newsletter-msg newsletter-msg--success" id="newsletterSuccess" hidden>Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.</p>
-            <p class="newsletter-msg newsletter-msg--error" id="newsletterError" hidden></p>
+          <!-- Inline status message (Single container) -->
+          <div class="newsletter-form__messages" id="newsletterMsg">
+            <div class="newsletter-msg" id="newsletterStatus" role="status" aria-live="polite" hidden>
+              <span class="newsletter-msg__icon-wrap" aria-hidden="true">
+                <svg class="newsletter-msg__icon newsletter-msg__icon--success" width="20" height="20" viewBox="0 0 20 20" fill="none" focusable="false">
+                  <circle cx="10" cy="10" r="9" stroke="#C9A25A" stroke-width="1.6"/>
+                  <path d="M6 10.2L8.6 12.8L14 7.5" stroke="#C9A25A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="newsletter-msg__icon newsletter-msg__icon--error" width="20" height="20" viewBox="0 0 20 20" fill="none" focusable="false">
+                  <circle cx="10" cy="10" r="9" stroke="#E58A8A" stroke-width="1.6"/>
+                  <path d="M10 6v5M10 14h.01" stroke="#E58A8A" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="newsletter-msg__text" id="newsletterStatusText"></span>
+            </div>
           </div>
         </form>
       </div>
@@ -459,6 +472,8 @@
 
   <!-- ===== SECTION 8: CONTACT ===== -->
   <section class="contact-section" id="contact" aria-label="Let's Connect">
+    <!-- Slow decorative drifting leaves in section margins (pointer-events none, behind content) -->
+    <div class="section-leaves-bg" id="contactLeavesBg" aria-hidden="true"></div>
     <div class="section__container contact-container reveal-on-scroll">
       <div class="contact-header">
         <h2 class="contact-heading">
@@ -475,27 +490,29 @@
         <!-- Left Column: Direct Links & Privacy Note -->
         <div class="contact-info">
           <div class="contact-info-card">
-            <div class="contact-info-item">
-              <span class="contact-info-label">Direct Email</span>
-              <a href="mailto:hello@underthetubatree.com" class="contact-link contact-link--email">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
-                <span>hello@underthetubatree.com</span>
-              </a>
-            </div>
+            <div class="contact-info-top">
+              <div class="contact-info-item">
+                <span class="contact-info-label">Direct Email</span>
+                <a href="mailto:hello@underthetubatree.com" class="contact-link contact-link--email">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <span class="contact-email-text">hello<wbr>@underthetubatree.com</span>
+                </a>
+              </div>
 
-            <div class="contact-info-item">
-              <span class="contact-info-label">Instagram</span>
-              <a href="https://instagram.com/underthetubatree" target="_blank" rel="noopener" class="contact-link contact-link--instagram">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="2" y="2" width="20" height="20" rx="5"/>
-                  <circle cx="12" cy="12" r="4.2"/>
-                  <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
-                </svg>
-                <span>@underthetubatree</span>
-              </a>
+              <div class="contact-info-item">
+                <span class="contact-info-label">Instagram</span>
+                <a href="https://instagram.com/underthetubatree" target="_blank" rel="noopener" class="contact-link contact-link--instagram">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="2" width="20" height="20" rx="5"/>
+                    <circle cx="12" cy="12" r="4.2"/>
+                    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
+                  </svg>
+                  <span>@underthetubatree</span>
+                </a>
+              </div>
             </div>
 
             <p class="contact-privacy-note">We only use your details to reply to your message. <a href="/privacy-policy" class="contact-privacy-link">See our Privacy Policy.</a></p>
@@ -512,18 +529,21 @@
                 <input type="text" name="b_contact_hp" id="contactHp" tabindex="-1" autocomplete="off">
               </div>
 
-              <!-- Name -->
-              <div class="contact-field">
-                <label for="contactName" class="contact-label">Name</label>
-                <input type="text" id="contactName" name="name" class="contact-input" placeholder="Your name" required aria-describedby="contactNameError">
-                <span class="contact-field-error" id="contactNameError" hidden>Please enter your name.</span>
-              </div>
+              <!-- Name & Email Row (side by side on desktop) -->
+              <div class="contact-form-row">
+                <!-- Name -->
+                <div class="contact-field">
+                  <label for="contactName" class="contact-label">Name</label>
+                  <input type="text" id="contactName" name="name" class="contact-input" placeholder="Your name" required aria-describedby="contactNameError">
+                  <span class="contact-field-error" id="contactNameError" hidden>Please enter your name.</span>
+                </div>
 
-              <!-- Email -->
-              <div class="contact-field">
-                <label for="contactEmail" class="contact-label">Email</label>
-                <input type="email" id="contactEmail" name="email" class="contact-input" placeholder="Your email address" required aria-describedby="contactEmailError">
-                <span class="contact-field-error" id="contactEmailError" hidden>Please enter a valid email address.</span>
+                <!-- Email -->
+                <div class="contact-field">
+                  <label for="contactEmail" class="contact-label">Email</label>
+                  <input type="email" id="contactEmail" name="email" class="contact-input" placeholder="Your email address" required aria-describedby="contactEmailError">
+                  <span class="contact-field-error" id="contactEmailError" hidden>Please enter a valid email address.</span>
+                </div>
               </div>
 
               <!-- "I'm contacting you as" -->
@@ -558,12 +578,20 @@
               <!-- Submit button -->
               <button type="submit" id="contactSubmitBtn" class="btn-gold contact-submit-btn">Send message</button>
 
-              <!-- Messages & Mailto fallback -->
-              <div class="contact-messages" id="contactMessages" aria-live="polite">
-                <p class="contact-msg contact-msg--success" id="contactSuccess" hidden>Thank you, your message is on its way. I'll reply as soon as I can.</p>
-                <div class="contact-msg contact-msg--error" id="contactError" hidden>
-                  <span>Something went wrong while sending your message. Please reach out directly at </span>
-                  <a href="mailto:hello@underthetubatree.com" class="contact-fallback-email">hello@underthetubatree.com</a>.
+              <!-- Messages & Mailto fallback (Single Status Container) -->
+              <div class="contact-messages" id="contactMessages">
+                <div class="contact-msg" id="contactStatus" role="status" aria-live="polite" hidden>
+                  <span class="contact-msg__icon-wrap" aria-hidden="true">
+                    <svg class="contact-msg__icon contact-msg__icon--success" width="18" height="18" viewBox="0 0 20 20" fill="none" focusable="false">
+                      <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M6 10.2L8.6 12.8L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg class="contact-msg__icon contact-msg__icon--error" width="18" height="18" viewBox="0 0 20 20" fill="none" focusable="false">
+                      <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M10 6v5M10 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="contact-msg__text" id="contactStatusText"></span>
                 </div>
                 <div class="contact-mailto-fallback-wrap" id="contactMailtoFallback" hidden>
                   <p class="contact-fallback-note">Running in demo mode. You can also open your email app with your message prefilled:</p>
@@ -657,10 +685,7 @@
     </div>
   </footer>
 
-  <!-- Section margin drifting leaves (desktop/tablet decorative, visible only when section in view) -->
-  <div class="margin-leaves" id="marginLeaves" aria-hidden="true"></div>
-
   <!-- Main JavaScript (deferred for performance) -->
-  <script src="script.js?v=37" defer></script>
+  <script src="script.js?v=38" defer></script>
 </body>
 </html>

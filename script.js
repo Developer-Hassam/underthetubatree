@@ -246,7 +246,7 @@
       buttonText: 'Subscribe',
       consentText: 'I agree to receive emails from Under The Tuba Tree. I can unsubscribe at any time. Read our Privacy Policy.',
       privacyNote: 'We respect your privacy. We will never share your email.',
-      successMessage: 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.',
+      successMessage: "Thank you! Please check your inbox to confirm your email. We'll send you one email when the book is ready.",
       errorMessage: 'Please enter a valid email address.'
     },
     social: {
@@ -763,30 +763,6 @@
 
   function initStoryGardenCards() {
     const grid = document.getElementById('sgCardsGrid');
-    const fallingLeavesContainer = document.getElementById('sgFallingLeaves');
-
-    // 1. Decorative slow drifting leaves (at most 5 on desktop, 3 on mobile; z-index lower than cards)
-    if (fallingLeavesContainer) {
-      fallingLeavesContainer.innerHTML = '';
-      const isMobile = window.innerWidth <= 899;
-      const count = isMobile ? 3 : 5;
-      const driftSprites = ['assets/leaf-gold.png', 'assets/leaf-green.png', 'assets/leaf-plum.png'];
-      for (let i = 0; i < count; i++) {
-        const leaf = document.createElement('img');
-        leaf.src = driftSprites[i % driftSprites.length];
-        leaf.className = 'sg-drift-leaf';
-        leaf.alt = '';
-        leaf.setAttribute('aria-hidden', 'true');
-        leaf.style.left = `${12 + i * (isMobile ? 36 : 18)}%`;
-        leaf.style.top = `${-20 + (i % 3) * 10}px`;
-        leaf.style.width = `${isMobile ? 22 : 28}px`;
-        leaf.style.height = 'auto';
-        leaf.style.animationDuration = `${9 + i * 2.5}s`;
-        leaf.style.animationDelay = `${i * 1.8}s`;
-        fallingLeavesContainer.appendChild(leaf);
-      }
-    }
-
     if (!grid) return;
 
     // 2. Render cards from gardenItems config
@@ -1060,9 +1036,57 @@
     const submitBtn = document.getElementById('newsletterSubmitBtn') || (form ? form.querySelector('button[type="submit"]') : null);
     const consentCheckbox = document.getElementById('newsletterConsent');
     const hpInput = document.getElementById('newsletterHp');
-    const successMsg = document.getElementById('newsletterSuccess');
-    const errorMsg = document.getElementById('newsletterError');
+    const statusEl = document.getElementById('newsletterStatus') || document.getElementById('newsletterSuccess');
+    const statusTextEl = document.getElementById('newsletterStatusText') || (statusEl ? statusEl.querySelector('.newsletter-msg__text') : null);
     if (!form || !emailInput) return;
+
+    const originalBtnText = submitBtn ? submitBtn.textContent : 'Subscribe';
+
+    function showStatus(type, text) {
+      if (!text || (typeof text === 'string' && !text.trim()) || !statusEl) {
+        hideStatus();
+        return;
+      }
+      statusEl.setAttribute('data-type', type);
+      if (statusTextEl) {
+        statusTextEl.textContent = text;
+      } else {
+        statusEl.textContent = text;
+      }
+      statusEl.hidden = false;
+    }
+
+    function hideStatus() {
+      if (!statusEl) return;
+      if (statusTextEl) {
+        statusTextEl.textContent = '';
+      }
+      statusEl.removeAttribute('data-type');
+      statusEl.hidden = true;
+    }
+
+    // On page load: status area is hidden, remove any leftover storage keys
+    hideStatus();
+    try {
+      sessionStorage.removeItem('subscribed_newsletter');
+      localStorage.removeItem('subscribed_newsletter');
+    } catch (_) {}
+
+    let isSubscribed = false;
+
+    // Re-enable the form if user edits the email field
+    emailInput.addEventListener('input', () => {
+      if (emailInput.getAttribute('aria-invalid') === 'true') {
+        emailInput.setAttribute('aria-invalid', 'false');
+      }
+      if (isSubscribed) {
+        isSubscribed = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1073,31 +1097,21 @@
         return;
       }
 
-      // Hide previous messages
-      if (successMsg) successMsg.hidden = true;
-      if (errorMsg) {
-        errorMsg.hidden = true;
-        errorMsg.textContent = '';
-      }
+      // On submit start: hideStatus()
+      hideStatus();
 
       const emailVal = emailInput.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!emailVal || !emailRegex.test(emailVal)) {
-        if (errorMsg) {
-          errorMsg.textContent = 'Please enter a valid email address.';
-          errorMsg.hidden = false;
-        }
+        showStatus('error', 'Please enter a valid email address.');
         emailInput.setAttribute('aria-invalid', 'true');
         emailInput.focus();
         return;
       }
 
       if (consentCheckbox && !consentCheckbox.checked) {
-        if (errorMsg) {
-          errorMsg.textContent = 'Please check the box to agree to receive emails.';
-          errorMsg.hidden = false;
-        }
+        showStatus('error', 'Please tick the box to agree.');
         consentCheckbox.focus();
         return;
       }
@@ -1105,10 +1119,22 @@
       emailInput.setAttribute('aria-invalid', 'false');
 
       // Disable the button while sending
-      const originalBtnText = submitBtn ? submitBtn.textContent : 'Subscribe';
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
+      }
+
+      const exactSuccessMsg = "Thank you! Please check your inbox to confirm your email. We'll send you one email when the book is ready.";
+
+      function handleSuccess() {
+        isSubscribed = true;
+        showStatus('success', exactSuccessMsg);
+        emailInput.value = '';
+        if (consentCheckbox) consentCheckbox.checked = false;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Subscribed';
+        }
       }
 
       const endpoint = NEWSLETTER_CONFIG && NEWSLETTER_CONFIG.endpoint ? NEWSLETTER_CONFIG.endpoint.trim() : '';
@@ -1117,11 +1143,7 @@
         if (!endpoint) {
           // Demo mode: simulate natural sending delay and display confirmation message
           await new Promise((resolve) => setTimeout(resolve, 500));
-          if (successMsg) {
-            successMsg.textContent = 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.';
-            successMsg.hidden = false;
-          }
-          form.reset();
+          handleSuccess();
         } else {
           // Live mode: send to MailerLite endpoint via fetch
           const formData = new FormData(form);
@@ -1134,22 +1156,15 @@
           });
 
           if (response.ok) {
-            if (successMsg) {
-              successMsg.textContent = 'Thank you, and welcome to the Story Circle! Please check your inbox to confirm your subscription.';
-              successMsg.hidden = false;
-            }
-            form.reset();
+            handleSuccess();
           } else {
             throw new Error('Network response was not ok');
           }
         }
       } catch (err) {
-        if (errorMsg) {
-          errorMsg.textContent = 'Something went wrong while connecting. Please try again in a few moments.';
-          errorMsg.hidden = false;
-        }
+        showStatus('error', 'Something went wrong. Please try again.');
       } finally {
-        if (submitBtn) {
+        if (submitBtn && !isSubscribed) {
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;
         }
@@ -1171,8 +1186,8 @@
     const consentCheckbox = document.getElementById('contactConsent');
     const hpInput = document.getElementById('contactHp');
     const submitBtn = document.getElementById('contactSubmitBtn');
-    const successMsg = document.getElementById('contactSuccess');
-    const errorMsg = document.getElementById('contactError');
+    const statusEl = document.getElementById('contactStatus') || document.getElementById('contactSuccess');
+    const statusTextEl = document.getElementById('contactStatusText') || (statusEl ? statusEl.querySelector('.contact-msg__text') : null);
     const mailtoWrap = document.getElementById('contactMailtoFallback');
     const mailtoLink = document.getElementById('contactMailtoLink');
 
@@ -1182,16 +1197,41 @@
     const messageErr = document.getElementById('contactMessageError');
     const consentErr = document.getElementById('contactConsentError');
 
+    function showStatus(type, text, isHtml = false) {
+      if (!text || (typeof text === 'string' && !text.trim()) || !statusEl) {
+        hideStatus();
+        return;
+      }
+      statusEl.setAttribute('data-type', type);
+      if (statusTextEl) {
+        if (isHtml) statusTextEl.innerHTML = text;
+        else statusTextEl.textContent = text;
+      } else {
+        if (isHtml) statusEl.innerHTML = text;
+        else statusEl.textContent = text;
+      }
+      statusEl.hidden = false;
+    }
+
+    function hideStatus() {
+      if (!statusEl) return;
+      if (statusTextEl) statusTextEl.textContent = '';
+      statusEl.removeAttribute('data-type');
+      statusEl.hidden = true;
+    }
+
     function clearErrors() {
       if (nameErr) nameErr.hidden = true;
       if (emailErr) emailErr.hidden = true;
       if (reasonErr) reasonErr.hidden = true;
       if (messageErr) messageErr.hidden = true;
       if (consentErr) consentErr.hidden = true;
-      if (successMsg) successMsg.hidden = true;
-      if (errorMsg) errorMsg.hidden = true;
+      hideStatus();
       if (mailtoWrap) mailtoWrap.hidden = true;
     }
+
+    // On page load: ensure everything is clean and hidden
+    clearErrors();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1255,10 +1295,7 @@
         if (!endpoint) {
           // Demo mode: simulate natural sending delay and display success + mailto fallback button
           await new Promise((resolve) => setTimeout(resolve, 500));
-          if (successMsg) {
-            successMsg.textContent = "Thank you, your message is on its way. I'll reply as soon as I can.";
-            successMsg.hidden = false;
-          }
+          showStatus('success', "Thank you, your message is on its way. I'll reply as soon as I can.");
 
           // Build prefilled mailto link
           const subject = encodeURIComponent(`Message from ${nameVal} [${reasonVal}]`);
@@ -1285,19 +1322,14 @@
           });
 
           if (response.ok) {
-            if (successMsg) {
-              successMsg.textContent = "Thank you, your message is on its way. I'll reply as soon as I can.";
-              successMsg.hidden = false;
-            }
+            showStatus('success', "Thank you, your message is on its way. I'll reply as soon as I can.");
             form.reset();
           } else {
             throw new Error('Form service submission failed');
           }
         }
       } catch (err) {
-        if (errorMsg) {
-          errorMsg.hidden = false;
-        }
+        showStatus('error', 'Something went wrong while sending your message. Please reach out directly at <a href="mailto:hello@underthetubatree.com" class="contact-fallback-email">hello@underthetubatree.com</a>.', true);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -1691,86 +1723,133 @@
   }
 
   // ==========================================================================
-  // 12c. PAGE MARGIN DRIFTING LEAVES
-  // 3-4 subtle slow leaves drifting in margins only when sections are in view
+  // 12c. SECTION BACKGROUND LEAVES (Subtle margin leaves, never over content)
+  // At most 3 per section on desktop, 2 on mobile; strictly behind content (z-index: 1)
   // ==========================================================================
-  function initMarginDriftingLeaves() {
-    const container = document.getElementById('marginLeaves');
-    if (!container || prefersReducedMotion || window.innerWidth <= 899) return;
+  function initSectionBackgroundLeaves() {
+    if (prefersReducedMotion) return;
 
-    // Fewer on mobile (2 on mobile, 4 on desktop)
-    const isMobile = window.innerWidth <= 768;
-    const count = isMobile ? 2 : 4;
-    const sprites = ['assets/leaf-gold.png', 'assets/leaf-plum.png', 'assets/leaf-amber.png', 'assets/leaf-olive.png', 'assets/leaf-green.png'];
+    const sections = [
+      { id: 'story-garden', containerId: 'sgFallingLeaves' },
+      { id: 'story-circle', containerId: 'newsletterLeavesBg' },
+      { id: 'contact', containerId: 'contactLeavesBg' }
+    ];
 
-    container.innerHTML = '';
-    const leavesData = [];
+    const isMobile = window.innerWidth <= 899;
+    const count = isMobile ? 2 : 3;
+    const sprites = [
+      'assets/leaf-gold.png',
+      'assets/leaf-plum.png',
+      'assets/leaf-green.png',
+      'assets/leaf-amber.png'
+    ];
 
-    for (let i = 0; i < count; i++) {
-      const img = document.createElement('img');
-      img.src = sprites[i % sprites.length];
-      img.alt = '';
-      img.className = 'margin-leaf';
-      img.style.width = `${18 + Math.random() * 12}px`;
-      img.style.height = 'auto';
+    const sectionEntries = [];
 
-      // Position in left or right margin (kept safely inside viewport bounds)
-      const isLeft = i % 2 === 0;
-      const xPercent = isLeft ? 2 + Math.random() * 4 : 88 + Math.random() * 4;
-      img.style.left = `${xPercent}vw`;
-      img.style.top = `${15 + i * 22}vh`;
+    sections.forEach((cfg, sIdx) => {
+      const secEl = document.getElementById(cfg.id);
+      const container = document.getElementById(cfg.containerId);
+      if (!secEl || !container) return;
 
-      container.appendChild(img);
+      container.innerHTML = '';
+      const leaves = [];
 
-      leavesData.push({
-        el: img,
-        baseY: 15 + i * 22,
-        speed: 0.002 + Math.random() * 0.003,
-        swayAmp: 10 + Math.random() * 15,
-        rot: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 0.2
-      });
-    }
+      for (let i = 0; i < count; i++) {
+        const leaf = document.createElement('img');
+        leaf.src = sprites[(sIdx * 2 + i) % sprites.length];
+        leaf.alt = '';
+        leaf.className = 'section-leaf';
+        leaf.setAttribute('aria-hidden', 'true');
 
-    // Monitor section visibility to toggle active state
-    let isAnyContentVisible = false;
-    const contentObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          isAnyContentVisible = true;
-        }
-      });
-      leavesData.forEach(l => {
-        if (isAnyContentVisible) {
-          l.el.classList.add('is-active');
+        // Size: 16px to 22px
+        const leafSize = 16 + (i % 3) * 3;
+        leaf.style.width = `${leafSize}px`;
+        leaf.style.height = 'auto';
+
+        // Position strictly in left or right outer margins
+        // Desktop: Container max-width is 1120px, margins are ample (left 2-4%, right 2-4%)
+        // Mobile: Kept at extreme 6px - 10px edge, behind solid cards (z-index 1)
+        const isLeft = i % 2 === 0;
+        if (isMobile) {
+          if (isLeft) {
+            leaf.style.left = `${6 + i * 4}px`;
+          } else {
+            leaf.style.right = `${6 + i * 4}px`;
+          }
         } else {
-          l.el.classList.remove('is-active');
+          if (isLeft) {
+            leaf.style.left = `${2 + (i * 2.5)}%`;
+          } else {
+            leaf.style.right = `${2 + (i * 2.5)}%`;
+          }
         }
-      });
-    }, { threshold: 0.1 });
 
-    document.querySelectorAll('section[id]').forEach(sec => contentObserver.observe(sec));
+        // Distributed vertically across section height
+        const topPos = isMobile ? (25 + i * 45) : (20 + i * 30);
+        leaf.style.top = `${topPos}%`;
+        leaf.style.animationDelay = `${(sIdx * 1.5 + i * 1.2)}s`;
 
-    // Gentle floating loop
-    let startTime = performance.now();
-    function animateMarginLeaves(now) {
-      if (!isPageVisible || prefersReducedMotion) {
-        requestAnimationFrame(animateMarginLeaves);
-        return;
+        container.appendChild(leaf);
+        leaves.push(leaf);
       }
-      const elapsed = (now - startTime) * 0.001;
 
-      leavesData.forEach((l, idx) => {
-        const sway = Math.sin(elapsed * 0.8 + idx) * l.swayAmp;
-        const driftY = Math.sin(elapsed * 0.5 + idx * 2) * 12;
-        l.rot += l.rotSpeed;
-        l.el.style.transform = `translate3d(${sway}px, ${driftY}px, 0) rotate(${l.rot}deg)`;
+      sectionEntries.push({
+        section: secEl,
+        container: container,
+        leaves: leaves,
+        inView: false
       });
+    });
 
-      requestAnimationFrame(animateMarginLeaves);
-    }
-    requestAnimationFrame(animateMarginLeaves);
+    if (sectionEntries.length === 0) return;
+
+    // IntersectionObserver: animate leaves only while section is in view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const match = sectionEntries.find(e => e.section === entry.target);
+        if (!match) return;
+
+        match.inView = entry.isIntersecting;
+        match.leaves.forEach(leaf => {
+          if (entry.isIntersecting && !document.hidden && isPageVisible) {
+            leaf.classList.add('is-active', 'is-animating');
+            leaf.style.animationPlayState = 'running';
+          } else {
+            leaf.classList.remove('is-active');
+            leaf.style.animationPlayState = 'paused';
+          }
+        });
+      });
+    }, { threshold: 0.08 });
+
+    sectionEntries.forEach(entry => observer.observe(entry.section));
+
+    // Visibilitychange: pause animations when tab is hidden, resume when tab is visible
+    document.addEventListener('visibilitychange', () => {
+      const hidden = document.hidden;
+      sectionEntries.forEach(entry => {
+        entry.leaves.forEach(leaf => {
+          if (hidden || !entry.inView) {
+            leaf.style.animationPlayState = 'paused';
+            if (hidden) leaf.classList.remove('is-active');
+          } else if (entry.inView) {
+            leaf.classList.add('is-active', 'is-animating');
+            leaf.style.animationPlayState = 'running';
+          }
+        });
+      });
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        initSectionBackgroundLeaves();
+      }, 200);
+    }, { passive: true });
   }
+
+  window.initSectionBackgroundLeaves = initSectionBackgroundLeaves;
 
   // ==========================================================================
   // 12d. ACTIVE NAV SCROLL OBSERVER (IntersectionObserver with gold underline)
@@ -1943,7 +2022,7 @@
     initContactForm();
     initFooter();
     initScrollReveal();
-    initMarginDriftingLeaves();
+    initSectionBackgroundLeaves();
 
     // Hero intro: only runs if hero elements are present
     if (stage || heroBg) {
